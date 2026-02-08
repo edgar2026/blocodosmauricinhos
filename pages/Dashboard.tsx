@@ -50,6 +50,7 @@ const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [updateLoading, setUpdateLoading] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [selectedFood, setSelectedFood] = useState<string>('');
   const [customFood, setCustomFood] = useState<string>('');
@@ -442,6 +443,27 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleDeleteParticipant = async (participantId: string) => {
+    if (!confirm('Tem certeza que deseja excluir este folião permanentemente?')) return;
+
+    try {
+      const { error: delError } = await supabase
+        .from('participants')
+        .delete()
+        .eq('id', participantId);
+
+      if (delError) throw delError;
+
+      setIsDetailModalOpen(false);
+      setSelectedParticipant(null);
+      // fetchParticipants() will be triggered by realtime channel or we can call it here
+      await fetchParticipants();
+    } catch (err: any) {
+      console.error('Erro ao deletar folião:', err);
+      alert(`Erro ao excluir folião: ${err.message || 'Erro desconhecido'}`);
+    }
+  };
+
   const handleConfirmDelivery = async (participantId: string, kg: number, foodType: string) => {
     setUpdateLoading(participantId);
     try {
@@ -663,27 +685,67 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-              <div className="lg:col-span-3 glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
-                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade</h4>
-                <div className="h-[300px] w-full">
-                  {barData && barData.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+              <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
+                <div className="flex items-center justify-between mb-10">
+                  <h4 className="text-[#002D5B] font-black uppercase tracking-widest text-xs">Arrecadação por Tipo de Alimento (KG)</h4>
+                  <div className="bg-[#1D71BC] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">Total: {totalFoodKg}kg</div>
+                </div>
+                <div className="h-[400px] w-full">
+                  {foodPieData && foodPieData.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={barData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#002D5B" strokeOpacity={0.05} />
+                      <BarChart data={foodPieData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                         <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#002D5B', fontSize: 10, fontWeight: 800 }} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#002D5B', fontSize: 10, fontWeight: 800 }} />
+                        <YAxis hide />
                         <Tooltip
                           contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
                           cursor={{ fill: '#002D5B', fillOpacity: 0.05 }}
+                          formatter={(value: any) => [value, ""]}
                         />
                         <Bar dataKey="value" radius={[10, 10, 0, 0]} barSize={40}>
-                          {barData.map((entry: any, index: number) => (
+                          {foodPieData.map((entry: any, index: number) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                           <LabelList
                             dataKey="value"
                             position="top"
+                            formatter={(v: number) => `${v}kg`}
+                            style={{ fill: '#002D5B', fontSize: 12, fontWeight: 900 }}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-gray-300">
+                      <ShoppingBasket size={48} className="mb-4 opacity-20" />
+                      <p className="text-[10px] font-black uppercase tracking-widest">Aguardando Coletas</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
+                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade</h4>
+                <div className="h-[300px] w-full">
+                  {barData && barData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={barData} layout="vertical" margin={{ top: 5, right: 40, left: 40, bottom: 5 }}>
+                        <XAxis type="number" hide />
+                        <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#002D5B', fontSize: 10, fontWeight: 800 }} width={100} />
+                        <Tooltip
+                          contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
+                          cursor={{ fill: '#002D5B', fillOpacity: 0.05 }}
+                          formatter={(value: any) => [value, ""]}
+                        />
+                        <Bar dataKey="value" radius={[0, 10, 10, 0]} barSize={30}>
+                          {barData.map((entry: any, index: number) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                          <LabelList
+                            dataKey="value"
+                            position="right"
                             style={{ fill: '#002D5B', fontSize: 12, fontWeight: 900 }}
                           />
                         </Bar>
@@ -697,12 +759,10 @@ const Dashboard: React.FC = () => {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
                 <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Perfil do Público</h4>
-                <div className="flex-1 min-h-[250px] relative">
+                <div className="flex-1 min-h-[300px] relative">
                   {userTypePieData && userTypePieData.length > 0 ? (
                     <>
                       <div className="h-[300px] w-full">
@@ -710,8 +770,8 @@ const Dashboard: React.FC = () => {
                           <PieChart>
                             <Pie
                               data={userTypePieData}
-                              innerRadius={60}
-                              outerRadius={90}
+                              innerRadius={70}
+                              outerRadius={100}
                               paddingAngle={8}
                               dataKey="value"
                               label={({ name, value }) => `${name}: ${value}`}
@@ -722,6 +782,7 @@ const Dashboard: React.FC = () => {
                             </Pie>
                             <Tooltip
                               contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
+                              formatter={(value: any) => [value, ""]}
                             />
                           </PieChart>
                         </ResponsiveContainer>
@@ -729,7 +790,7 @@ const Dashboard: React.FC = () => {
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
                         <div>
                           <p className="text-[10px] font-black uppercase opacity-40">Total</p>
-                          <p className="text-xl font-black text-[#002D5B]">{totalInscritos}</p>
+                          <p className="text-2xl font-black text-[#002D5B]">{totalInscritos}</p>
                         </div>
                       </div>
                     </>
@@ -737,48 +798,6 @@ const Dashboard: React.FC = () => {
                     <div className="h-full flex flex-col items-center justify-center text-gray-300 py-10">
                       <Users size={48} className="mb-4 opacity-20" />
                       <p className="text-[10px] font-black uppercase tracking-widest">Aguardando Inscrições</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
-                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Distribuição de Alimentos</h4>
-                <div className="flex-1 min-h-[250px] relative">
-                  {foodPieData && foodPieData.length > 0 ? (
-                    <>
-                      <div className="h-[300px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie
-                              data={foodPieData}
-                              innerRadius={60}
-                              outerRadius={90}
-                              paddingAngle={8}
-                              dataKey="value"
-                              label={({ name, value }) => `${name}: ${value}kg`}
-                            >
-                              {foodPieData.map((entry: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                              ))}
-                            </Pie>
-                            <Tooltip
-                              contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                            />
-                          </PieChart>
-                        </ResponsiveContainer>
-                      </div>
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
-                        <div>
-                          <p className="text-[10px] font-black uppercase opacity-40">Total</p>
-                          <p className="text-xl font-black text-[#002D5B]">{totalFoodKg}kg</p>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="h-full flex flex-col items-center justify-center text-gray-300 py-10">
-                      <ShoppingBasket size={48} className="mb-4 opacity-20" />
-                      <p className="text-[10px] font-black uppercase tracking-widest">Aguardando Coletas</p>
                     </div>
                   )}
                 </div>
@@ -833,9 +852,12 @@ const Dashboard: React.FC = () => {
                           {!p.bracelet_delivered ? (
                             <button onClick={() => { setSelectedParticipant(p); setIsModalOpen(true); }} className="bg-[#2A9D8F] text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg hover:scale-105 transition-all">Confirmar Entrega</button>
                           ) : (
-                            <div className="text-[10px] font-bold text-[#2A9D8F] flex flex-col items-center">
-                              <span className="opacity-50 uppercase text-[8px]">Entregue em:</span>
-                              <span>{new Date(p.delivery_at!).toLocaleDateString('pt-BR')} {new Date(p.delivery_at!).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                            <div className="flex flex-col items-center gap-2">
+                              <div className="text-[10px] font-bold text-[#2A9D8F] flex flex-col items-center">
+                                <span className="opacity-50 uppercase text-[8px]">Entregue em:</span>
+                                <span>{new Date(p.delivery_at!).toLocaleDateString('pt-BR')} {new Date(p.delivery_at!).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                              </div>
+                              <button onClick={() => { setSelectedParticipant(p); setIsDetailModalOpen(true); }} className="text-[9px] font-black uppercase text-[#1D71BC] hover:underline transition-all">Ver Detalhes</button>
                             </div>
                           )}
                         </td>
@@ -1125,6 +1147,91 @@ const Dashboard: React.FC = () => {
           )
         }
       </main >
+
+      {/* Modal Detalhes do Participante */}
+      {isDetailModalOpen && selectedParticipant && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#002D5B]/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-[3rem] w-full max-w-2xl shadow-2xl overflow-hidden border-4 border-[#1D71BC] animate-modal-enter">
+            <div className="bg-[#1D71BC] p-8 text-white relative">
+              <button onClick={() => setIsDetailModalOpen(false)} className="absolute top-8 right-8 text-white/40 hover:text-white transition-colors"><X size={24} /></button>
+              <div className="flex items-center gap-4 mb-2">
+                <div className="bg-white/20 p-3 rounded-2xl"><UserIcon className="text-white" size={24} /></div>
+                <div>
+                  <h2 className="text-xl font-black uppercase tracking-widest">Detalhes do Folião</h2>
+                  <p className="text-white/50 text-[10px] font-bold uppercase tracking-[0.2em]">Registro Completo</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-10 space-y-6">
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Nome Completo</label>
+                  <p className="text-[#002D5B] font-black text-lg">{selectedParticipant.name}</p>
+                </div>
+                <div>
+                  <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">CPF</label>
+                  <p className="text-[#002D5B] font-bold font-mono">{selectedParticipant.cpf}</p>
+                </div>
+                <div>
+                  <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">E-mail</label>
+                  <p className="text-[#002D5B] font-bold">{selectedParticipant.email}</p>
+                </div>
+                <div>
+                  <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Telefone</label>
+                  <p className="text-[#002D5B] font-bold">{selectedParticipant.phone}</p>
+                </div>
+                <div>
+                  <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Unidade</label>
+                  <p className="text-[#002D5B] font-black uppercase">{selectedParticipant.unit}</p>
+                </div>
+                <div>
+                  <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Vínculo</label>
+                  <p className="text-[#002D5B] font-black uppercase">{selectedParticipant.user_type || 'Não Informado'}</p>
+                </div>
+              </div>
+
+              {selectedParticipant.bracelet_delivered && (
+                <div className="mt-8 pt-8 border-t-2 border-dashed border-[#1D71BC]/10">
+                  <h3 className="text-[#1D71BC] text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <PackageCheck size={14} /> Dados da Entrega
+                  </h3>
+                  <div className="grid grid-cols-3 gap-6 bg-[#1D71BC]/5 p-6 rounded-3xl">
+                    <div>
+                      <label className="text-gray-400 text-[8px] font-black uppercase tracking-widest block mb-1">Alimento</label>
+                      <p className="text-[#1D71BC] font-black text-sm uppercase">{selectedParticipant.food_type}</p>
+                    </div>
+                    <div>
+                      <label className="text-gray-400 text-[8px] font-black uppercase tracking-widest block mb-1">Peso</label>
+                      <p className="text-[#1D71BC] font-black text-sm uppercase">{selectedParticipant.food_kg} KG</p>
+                    </div>
+                    <div>
+                      <label className="text-gray-400 text-[8px] font-black uppercase tracking-widest block mb-1">Data/Hora</label>
+                      <p className="text-[#1D71BC] font-bold text-[10px]">
+                        {new Date(selectedParticipant.delivery_at!).toLocaleDateString('pt-BR')} às {new Date(selectedParticipant.delivery_at!).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-6 flex gap-4">
+                <button
+                  onClick={() => setIsDetailModalOpen(false)}
+                  className="flex-1 bg-[#002D5B] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-[1.02] transition-all"
+                >
+                  Fechar Detalhes
+                </button>
+                <button
+                  onClick={() => handleDeleteParticipant(selectedParticipant.id!)}
+                  className="flex-1 bg-red-50 text-[#E63946] border-2 border-[#E63946]/10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 size={16} /> Excluir Registro
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal Coleta de Alimentos */}
       {
