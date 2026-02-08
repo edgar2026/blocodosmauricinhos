@@ -31,7 +31,7 @@ import {
   Upload
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area, PieChart, Pie } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area, PieChart, Pie, LabelList } from 'recharts';
 import { supabase, Participant, Attraction, EventSettings } from '../lib/supabase';
 
 const Dashboard: React.FC = () => {
@@ -669,6 +669,11 @@ const Dashboard: React.FC = () => {
                           {barData.map((entry: any, index: number) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
+                          <LabelList
+                            dataKey="value"
+                            position="top"
+                            style={{ fill: '#002D5B', fontSize: 12, fontWeight: 900 }}
+                          />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
@@ -695,6 +700,7 @@ const Dashboard: React.FC = () => {
                               outerRadius={90}
                               paddingAngle={8}
                               dataKey="value"
+                              label={({ name, value }) => `${name}: ${value}kg`}
                             >
                               {foodPieData.map((entry: any, index: number) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} />
