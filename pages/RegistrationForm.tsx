@@ -119,26 +119,25 @@ const RegistrationForm: React.FC = () => {
       } as React.CSSProperties}
     >
       {/* Header */}
-      <div className="w-full glass-card py-2 px-8 flex items-center justify-between border-b-4 border-[#FFD100] shadow-xl mb-12 sticky top-0 z-50">
-        <Link to="/" className="text-[var(--primary-color)] flex items-center space-x-4 group">
-          <div className="p-2.5 bg-[var(--secondary-color)] rounded-xl group-hover:bg-[var(--primary-color)] group-hover:text-white transition-all">
-            <ArrowLeft size={18} />
-          </div>
-          <Logo className="h-10 md:h-14" />
-        </Link>
-        <h1 className="text-[var(--primary-color)] text-lg font-black uppercase hidden sm:block tracking-widest">{settings?.edition || '4ª Edição'} - {settings?.year_label || 'Ano IV'}</h1>
+      <div className="w-full glass-card py-4 px-8 flex items-center justify-center border-b-4 border-[#FFD100] shadow-xl mb-12 sticky top-0 z-50 relative">
+        <Logo className="h-12 md:h-16" />
+        {/* Painel Admin Invisível aqui também para manter o padrão */}
         <Link
           to="/dashboard"
-          className="bg-[#002D5B] text-white text-[10px] font-black px-6 py-2.5 rounded-xl hover:bg-[#FFD100] hover:text-[#002D5B] transition-all uppercase tracking-widest shadow-lg flex items-center gap-2"
+          className="absolute right-8 text-[#002D5B] opacity-0 hover:opacity-100 transition-all font-black text-[8px] uppercase tracking-widest"
         >
-          <Users size={14} />
-          Painel Admin
+          Acesso Restrito
         </Link>
       </div>
 
       {/* Form Card */}
       <div className="w-full max-w-2xl px-4 pb-20 relative z-10">
-        <div className="glass-card rounded-[3rem] border-2 border-white/40 shadow-2xl p-10 backdrop-blur-2xl">
+        <div className="glass-card rounded-[3rem] border-2 border-white/40 shadow-2xl p-10 backdrop-blur-2xl relative">
+          <Link to="/" className="absolute left-8 top-8 group">
+            <div className="p-3 bg-[var(--secondary-color)] rounded-2xl group-hover:bg-[var(--primary-color)] group-hover:text-white transition-all shadow-lg flex items-center justify-center">
+              <ArrowLeft size={20} />
+            </div>
+          </Link>
 
           <div className="mb-10 text-center">
             <span className="bg-[var(--secondary-color)]/20 text-[var(--primary-color)] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em]">{settings?.edition} • Garanta sua Vaga</span>
