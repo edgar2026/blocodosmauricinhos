@@ -21,6 +21,7 @@ export interface Participant {
     delivery_at?: string;
     food_kg: number;
     food_type?: string;
+    user_type?: string;
     admin_id?: string;
     notes?: string;
     created_at?: string;

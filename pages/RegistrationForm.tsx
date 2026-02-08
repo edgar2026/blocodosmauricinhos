@@ -33,8 +33,16 @@ const RegistrationForm: React.FC = () => {
     phone: '',
     email: '',
     cpf: '',
-    unit: ''
+    unit: '',
+    user_type: 'Aluno(a)'
   });
+
+  const isFormValid =
+    formData.name.trim() !== '' &&
+    formData.phone.trim() !== '' &&
+    formData.email.trim() !== '' &&
+    formData.cpf.trim() !== '' &&
+    formData.unit !== '';
 
   // Mask functions
   const maskCPF = (value: string) => {
@@ -77,7 +85,8 @@ const RegistrationForm: React.FC = () => {
             phone: formData.phone,
             email: formData.email,
             cpf: formData.cpf,
-            unit: formData.unit
+            unit: formData.unit,
+            user_type: formData.user_type
           }
         ]);
 
@@ -93,7 +102,7 @@ const RegistrationForm: React.FC = () => {
       }
 
       // Clear form after successful submission
-      setFormData({ name: '', phone: '', email: '', cpf: '', unit: '' });
+      setFormData({ name: '', phone: '', email: '', cpf: '', unit: '', user_type: 'Aluno(a)' });
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
@@ -104,7 +113,7 @@ const RegistrationForm: React.FC = () => {
   };
 
   const clearForm = () => {
-    setFormData({ name: '', phone: '', email: '', cpf: '', unit: '' });
+    setFormData({ name: '', phone: '', email: '', cpf: '', unit: '', user_type: 'Aluno(a)' });
     setSubmitted(false);
     setError(null);
   };
@@ -206,10 +215,10 @@ const RegistrationForm: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">E-mail Institucional</label>
+                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">E-mail</label>
                     <input
                       type="email"
-                      placeholder="usuario@uninassau.edu.br"
+                      placeholder="seu.email@exemplo.com"
                       className="w-full bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -254,6 +263,27 @@ const RegistrationForm: React.FC = () => {
                   </div>
                 </div>
 
+                <div className="space-y-2">
+                  <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1 flex items-center gap-2">
+                    Vínculo com a Instituição <span className="text-[#E63946]">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="w-full appearance-none bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold bg-white"
+                      value={formData.user_type}
+                      onChange={e => setFormData({ ...formData, user_type: e.target.value })}
+                      required
+                    >
+                      <option value="Aluno(a)">Aluno(a)</option>
+                      <option value="Colaborador(a)">Colaborador(a)</option>
+                      <option value="Público Externo">Público Externo</option>
+                    </select>
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#FFD100]">
+                      <ChevronDown size={24} />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex flex-col sm:flex-row items-center gap-6 pt-6">
                   <button
                     type="button"
@@ -264,8 +294,8 @@ const RegistrationForm: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full sm:w-2/3 bg-[#E63946] text-white font-black py-5 rounded-[1.5rem] hover:bg-[#D62828] transition-all uppercase tracking-widest shadow-[0_15px_30px_rgba(230,57,70,0.3)] hover:shadow-[0_20px_40px_rgba(230,57,70,0.5)] hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
+                    disabled={loading || !isFormValid}
+                    className="w-full sm:w-2/3 bg-[#E63946] text-white font-black py-5 rounded-[1.5rem] hover:bg-[#D62828] transition-all uppercase tracking-widest shadow-[0_15px_30px_rgba(230,57,70,0.3)] hover:shadow-[0_20px_40px_rgba(230,57,70,0.5)] hover:-translate-y-1 disabled:opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <>

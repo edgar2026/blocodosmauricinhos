@@ -507,6 +507,18 @@ const Dashboard: React.FC = () => {
     color: ['#FFD100', '#002D5B', '#E63946', '#2A9D8F', '#1D71BC', '#F97316', '#8E44AD'][index % 7]
   }));
 
+  const userTypeCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
+    const type = p?.user_type || 'Aluno(a)';
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>) : {};
+
+  const userTypePieData = Object.entries(userTypeCounts).map(([name, value], index) => ({
+    name,
+    value,
+    color: ['#002D5B', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5]
+  }));
+
   const filteredParticipants = participants.filter(p => {
     const q = searchQuery.toLowerCase();
     const name = (p?.name || '').toLowerCase();
@@ -685,9 +697,53 @@ const Dashboard: React.FC = () => {
                   )}
                 </div>
               </div>
+            </div>
 
-              <div className="lg:col-span-2 glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
-                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Alimentos Arrecadados</h4>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
+                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Perfil do Público</h4>
+                <div className="flex-1 min-h-[250px] relative">
+                  {userTypePieData && userTypePieData.length > 0 ? (
+                    <>
+                      <div className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={userTypePieData}
+                              innerRadius={60}
+                              outerRadius={90}
+                              paddingAngle={8}
+                              dataKey="value"
+                              label={({ name, value }) => `${name}: ${value}`}
+                            >
+                              {userTypePieData.map((entry: any, index: number) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
+                        <div>
+                          <p className="text-[10px] font-black uppercase opacity-40">Total</p>
+                          <p className="text-xl font-black text-[#002D5B]">{totalInscritos}</p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-gray-300 py-10">
+                      <Users size={48} className="mb-4 opacity-20" />
+                      <p className="text-[10px] font-black uppercase tracking-widest">Aguardando Inscrições</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
+                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Distribuição de Alimentos</h4>
                 <div className="flex-1 min-h-[250px] relative">
                   {foodPieData && foodPieData.length > 0 ? (
                     <>
@@ -731,338 +787,344 @@ const Dashboard: React.FC = () => {
           </>
         )}
 
-        {activeTab === 'collection' && (
-          <div className="glass-card p-8 rounded-[3rem] shadow-2xl border-4 border-[#FFD100]/30 animate-fade-in bg-white/40">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
-              <div className="flex-1 w-full relative">
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#002D5B] opacity-30" size={24} />
-                <input
-                  type="text"
-                  placeholder="Buscar folião por Nome, CPF ou E-mail..."
-                  className="w-full bg-white border-2 border-[#002D5B]/5 rounded-3xl py-6 pl-16 pr-8 focus:border-[#FFD100] focus:outline-none shadow-xl font-bold placeholder:opacity-30 transition-all text-lg"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+        {
+          activeTab === 'collection' && (
+            <div className="glass-card p-8 rounded-[3rem] shadow-2xl border-4 border-[#FFD100]/30 animate-fade-in bg-white/40">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+                <div className="flex-1 w-full relative">
+                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#002D5B] opacity-30" size={24} />
+                  <input
+                    type="text"
+                    placeholder="Buscar folião por Nome, CPF ou E-mail..."
+                    className="w-full bg-white border-2 border-[#002D5B]/5 rounded-3xl py-6 pl-16 pr-8 focus:border-[#FFD100] focus:outline-none shadow-xl font-bold placeholder:opacity-30 transition-all text-lg"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto rounded-[2rem] border-2 border-[#002D5B]/5 bg-white/80">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#002D5B] text-white">
+                      <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest rounded-tl-[2rem]">Folião</th>
+                      <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">CPF</th>
+                      <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Unidade</th>
+                      <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Status</th>
+                      <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2rem]">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {loading ? (
+                      <tr><td colSpan={5} className="text-center py-20"><Loader2 className="w-12 h-12 animate-spin inline-block text-[#FFD100]" /></td></tr>
+                    ) : paginatedParticipants.map((p, index) => (
+                      <tr key={p.id || index} className="group hover:bg-[#FFD100]/5 transition-colors border-b border-[#002D5B]/5 last:border-0">
+                        <td className="px-10 py-6"><p className="font-extrabold text-[#002D5B]">{p.name}</p></td>
+                        <td className="px-6 py-6 text-center font-mono text-xs text-[#002D5B]/60 font-bold">{p.cpf}</td>
+                        <td className="px-6 py-6 text-center"><span className="bg-[#002D5B]/5 text-[#002D5B] px-4 py-1 rounded-lg text-[10px] font-black uppercase">{p.unit}</span></td>
+                        <td className="px-6 py-6 text-center">
+                          {p.bracelet_delivered ? (
+                            <div className="inline-flex items-center gap-2 bg-[#2A9D8F]/10 text-[#2A9D8F] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#2A9D8F]/20"><CheckCircle2 size={12} /> Entregue</div>
+                          ) : (
+                            <div className="inline-flex items-center gap-2 bg-[#FFD100]/10 text-[#002D5B] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#FFD100]/40"><Clock size={12} /> Pendente</div>
+                          )}
+                        </td>
+                        <td className="px-10 py-6 text-center">
+                          {!p.bracelet_delivered ? (
+                            <button onClick={() => { setSelectedParticipant(p); setIsModalOpen(true); }} className="bg-[#2A9D8F] text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg hover:scale-105 transition-all">Confirmar Entrega</button>
+                          ) : (
+                            <div className="text-[10px] font-bold text-[#2A9D8F] flex flex-col items-center">
+                              <span className="opacity-50 uppercase text-[8px]">Entregue em:</span>
+                              <span>{new Date(p.delivery_at!).toLocaleDateString('pt-BR')} {new Date(p.delivery_at!).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
+          )
+        }
 
-            <div className="overflow-x-auto rounded-[2rem] border-2 border-[#002D5B]/5 bg-white/80">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#002D5B] text-white">
-                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest rounded-tl-[2rem]">Folião</th>
-                    <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">CPF</th>
-                    <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Unidade</th>
-                    <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Status</th>
-                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2rem]">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr><td colSpan={5} className="text-center py-20"><Loader2 className="w-12 h-12 animate-spin inline-block text-[#FFD100]" /></td></tr>
-                  ) : paginatedParticipants.map((p, index) => (
-                    <tr key={p.id || index} className="group hover:bg-[#FFD100]/5 transition-colors border-b border-[#002D5B]/5 last:border-0">
-                      <td className="px-10 py-6"><p className="font-extrabold text-[#002D5B]">{p.name}</p></td>
-                      <td className="px-6 py-6 text-center font-mono text-xs text-[#002D5B]/60 font-bold">{p.cpf}</td>
-                      <td className="px-6 py-6 text-center"><span className="bg-[#002D5B]/5 text-[#002D5B] px-4 py-1 rounded-lg text-[10px] font-black uppercase">{p.unit}</span></td>
-                      <td className="px-6 py-6 text-center">
-                        {p.bracelet_delivered ? (
-                          <div className="inline-flex items-center gap-2 bg-[#2A9D8F]/10 text-[#2A9D8F] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#2A9D8F]/20"><CheckCircle2 size={12} /> Entregue</div>
-                        ) : (
-                          <div className="inline-flex items-center gap-2 bg-[#FFD100]/10 text-[#002D5B] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#FFD100]/40"><Clock size={12} /> Pendente</div>
-                        )}
-                      </td>
-                      <td className="px-10 py-6 text-center">
-                        {!p.bracelet_delivered ? (
-                          <button onClick={() => { setSelectedParticipant(p); setIsModalOpen(true); }} className="bg-[#2A9D8F] text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg hover:scale-105 transition-all">Confirmar Entrega</button>
-                        ) : (
-                          <div className="text-[10px] font-bold text-[#2A9D8F] flex flex-col items-center">
-                            <span className="opacity-50 uppercase text-[8px]">Entregue em:</span>
-                            <span>{new Date(p.delivery_at!).toLocaleDateString('pt-BR')} {new Date(p.delivery_at!).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'schedule' && (
-          <div className="animate-fade-in space-y-8">
-            <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#1D71BC]/30">
-              <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-8 flex items-center gap-4">
-                <div className={`${editingId ? 'bg-orange-500' : 'bg-[#1D71BC]'} p-3 rounded-2xl text-white transition-colors`}><Calendar size={24} /></div>
-                {editingId ? 'Editar Atração' : 'Nova Atração'}
-              </h3>
-              <form onSubmit={handleAddAttraction} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Nome da Atração</label>
-                  <input type="text" placeholder="Ex: Banda de Frevo" className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.name} onChange={e => setNewAttraction({ ...newAttraction, name: e.target.value })} />
-                </div>
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Horário</label>
-                  <input type="time" className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.time} onChange={e => setNewAttraction({ ...newAttraction, time: e.target.value })} />
-                </div>
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Tipo</label>
-                  <select className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.type} onChange={e => setNewAttraction({ ...newAttraction, type: e.target.value })}>
-                    <option value="banda">Banda / Show</option>
-                    <option value="dj">DJ Set</option>
-                    <option value="outro">Outro</option>
-                  </select>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      className="w-5 h-5 rounded-lg border-2 border-[#1D71BC] text-[#1D71BC] focus:ring-[#1D71BC]"
-                      checked={newAttraction.is_featured}
-                      onChange={e => setNewAttraction({ ...newAttraction, is_featured: e.target.checked })}
-                    />
-                    <span className="text-[10px] font-black uppercase text-[#002D5B] group-hover:text-[#1D71BC] transition-colors">Destaque Principal ★</span>
-                  </label>
-                  <div className="flex gap-4">
-                    {editingId && (
-                      <button
-                        type="button"
-                        onClick={() => { setEditingId(null); setNewAttraction({ name: '', time: '', type: 'banda', is_featured: false }); }}
-                        className="flex-1 bg-gray-100 text-gray-500 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all font-sans"
-                      >
-                        Cancelar
+        {
+          activeTab === 'schedule' && (
+            <div className="animate-fade-in space-y-8">
+              <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#1D71BC]/30">
+                <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-8 flex items-center gap-4">
+                  <div className={`${editingId ? 'bg-orange-500' : 'bg-[#1D71BC]'} p-3 rounded-2xl text-white transition-colors`}><Calendar size={24} /></div>
+                  {editingId ? 'Editar Atração' : 'Nova Atração'}
+                </h3>
+                <form onSubmit={handleAddAttraction} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Nome da Atração</label>
+                    <input type="text" placeholder="Ex: Banda de Frevo" className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.name} onChange={e => setNewAttraction({ ...newAttraction, name: e.target.value })} />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Horário</label>
+                    <input type="time" className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.time} onChange={e => setNewAttraction({ ...newAttraction, time: e.target.value })} />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Tipo</label>
+                    <select className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.type} onChange={e => setNewAttraction({ ...newAttraction, type: e.target.value })}>
+                      <option value="banda">Banda / Show</option>
+                      <option value="dj">DJ Set</option>
+                      <option value="outro">Outro</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 rounded-lg border-2 border-[#1D71BC] text-[#1D71BC] focus:ring-[#1D71BC]"
+                        checked={newAttraction.is_featured}
+                        onChange={e => setNewAttraction({ ...newAttraction, is_featured: e.target.checked })}
+                      />
+                      <span className="text-[10px] font-black uppercase text-[#002D5B] group-hover:text-[#1D71BC] transition-colors">Destaque Principal ★</span>
+                    </label>
+                    <div className="flex gap-4">
+                      {editingId && (
+                        <button
+                          type="button"
+                          onClick={() => { setEditingId(null); setNewAttraction({ name: '', time: '', type: 'banda', is_featured: false }); }}
+                          className="flex-1 bg-gray-100 text-gray-500 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all font-sans"
+                        >
+                          Cancelar
+                        </button>
+                      )}
+                      <button type="submit" disabled={attractionLoading} className={`${editingId ? 'bg-orange-500' : 'bg-[#1D71BC]'} text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-tighter shadow-xl hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-2 flex-[2]`}>
+                        {attractionLoading ? <Loader2 size={16} className="animate-spin" /> : (editingId ? <Pencil size={16} /> : <Plus size={16} />)}
+                        {editingId ? 'Salvar Alterações' : 'Adicionar na Grade'}
                       </button>
-                    )}
-                    <button type="submit" disabled={attractionLoading} className={`${editingId ? 'bg-orange-500' : 'bg-[#1D71BC]'} text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-tighter shadow-xl hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-2 flex-[2]`}>
-                      {attractionLoading ? <Loader2 size={16} className="animate-spin" /> : (editingId ? <Pencil size={16} /> : <Plus size={16} />)}
-                      {editingId ? 'Salvar Alterações' : 'Adicionar na Grade'}
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-white/50 min-h-[400px]">
+                <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 text-center">Programação Oficial</h3>
+
+                <div className="space-y-6 max-w-3xl mx-auto">
+                  {attractions.length === 0 ? (
+                    <div className="text-center py-20 bg-[#002D5B]/5 rounded-[3rem] border-4 border-dashed border-[#002D5B]/10 animate-pulse">
+                      <Music className="w-16 h-16 text-[#002D5B]/10 mx-auto mb-4" />
+                      <p className="text-2xl font-black text-[#002D5B] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
+                    </div>
+                  ) : (
+                    attractions.map((attr, index) => (
+                      <div key={attr.id} className={`group relative bg-white rounded-3xl p-6 shadow-xl border-2 transition-all hover:scale-[1.02] flex items-center justify-between ${attr.is_featured ? 'border-[#FFD100] bg-[#FFD100]/5 ring-4 ring-[#FFD100]/10' : 'border-white hover:border-[#FFD100]'}`}>
+                        <div className="flex items-center gap-8">
+                          <div className={`px-6 py-3 rounded-2xl font-black text-xl shadow-lg ring-4 ${attr.is_featured ? 'bg-[#002D5B] text-white ring-[#002D5B]/20' : 'bg-[#FFD100] text-[#002D5B] ring-[#FFD100]/20'}`}>{attr.time}</div>
+                          <div>
+                            <div className="flex items-center gap-3">
+                              <p className="font-black text-[#002D5B] text-2xl uppercase tracking-tighter">{attr.name}</p>
+                              {attr.is_featured && <Star size={20} className="text-[#FFD100] fill-[#FFD100]" />}
+                            </div>
+                            <p className="text-[10px] font-extrabold uppercase text-[#002D5B]/40 tracking-widest">{attr.type}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button onClick={() => handleEditClick(attr)} className="p-4 bg-blue-50 text-blue-400 rounded-2xl hover:bg-blue-500 hover:text-white transition-all md:opacity-40 group-hover:opacity-100" title="Editar Atração"><Pencil size={20} /></button>
+                          <button onClick={() => setDeleteModal({ isOpen: true, id: attr.id || null, name: attr.name })} className="p-4 bg-red-50 text-red-400 rounded-2xl hover:bg-red-500 hover:text-white transition-all md:opacity-40 group-hover:opacity-100" title="Excluir Atração"><Trash2 size={20} /></button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        }
+        {
+          activeTab === 'settings' && eventSettings && (
+            <div className="animate-fade-in space-y-8 max-w-4xl mx-auto">
+              <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#002D5B]/10">
+                <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 flex items-center gap-4">
+                  <div className="bg-[#002D5B] p-3 rounded-2xl text-white"><Settings size={28} /></div>
+                  Identidade do Evento
+                </h3>
+
+                <form onSubmit={handleUpdateSettings} className="space-y-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Edição do Evento</label>
+                      <input
+                        type="text"
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                        value={eventSettings.edition}
+                        onChange={e => setEventSettings({ ...eventSettings, edition: e.target.value })}
+                        placeholder="Ex: 4ª Edição"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Selo de Ano (Header)</label>
+                      <input
+                        type="text"
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                        value={eventSettings.year_label}
+                        onChange={e => setEventSettings({ ...eventSettings, year_label: e.target.value })}
+                        placeholder="Ex: Ano IV"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Data Oficial</label>
+                      <input
+                        type="text"
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                        value={eventSettings.event_date}
+                        onChange={e => setEventSettings({ ...eventSettings, event_date: e.target.value })}
+                        placeholder="Ex: 27 de Fevereiro"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Subtítulo (Abaixo do Título)</label>
+                      <input
+                        type="text"
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                        value={eventSettings.subtitle || ''}
+                        onChange={e => setEventSettings({ ...eventSettings, subtitle: e.target.value })}
+                        placeholder="Frase curta de impacto..."
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Título (Linha 1)</label>
+                      <input
+                        type="text"
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                        value={eventSettings.title_main || ''}
+                        onChange={e => setEventSettings({ ...eventSettings, title_main: e.target.value })}
+                        placeholder="Ex: Bloco dos"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Título (Destaque)</label>
+                      <input
+                        type="text"
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                        value={eventSettings.title_highlight || ''}
+                        onChange={e => setEventSettings({ ...eventSettings, title_highlight: e.target.value })}
+                        placeholder="Ex: Mauricinhos"
+                      />
+                    </div>
+                    <div className="space-y-4 md:col-span-2">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto "Sobre o Evento" (Footer)</label>
+                      <textarea
+                        rows={3}
+                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
+                        value={eventSettings.about_text || ''}
+                        onChange={e => setEventSettings({ ...eventSettings, about_text: e.target.value })}
+                        placeholder="Descrição detalhada para o rodapé..."
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Imagem Hero (Banner)</label>
+                      <div className="flex flex-col gap-4">
+                        <div className="flex gap-4 items-center">
+                          <div className="flex-1 relative group cursor-pointer">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleImageUpload}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                              disabled={imageUploading}
+                            />
+                            <div className={`w-full bg-[#002D5B]/5 border-2 border-dashed rounded-2xl px-6 py-6 transition-all flex items-center justify-center gap-3 ${imageUploading ? 'border-[#002D5B]/20 animate-pulse' : 'border-[#002D5B]/20 group-hover:border-[#002D5B] group-hover:bg-[#002D5B]/5'}`}>
+                              {imageUploading ? (
+                                <>
+                                  <Loader2 className="animate-spin text-[#002D5B]" size={20} />
+                                  <span className="text-[10px] font-black uppercase text-[#002D5B]">Enviando...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Upload className="text-[#002D5B]" size={20} />
+                                  <span className="text-[10px] font-black uppercase text-[#002D5B]">Escolher Nova Foto Hero</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <div className="w-24 h-24 rounded-2xl bg-gray-100 overflow-hidden border-4 border-white shadow-xl flex-shrink-0">
+                            <img
+                              src={eventSettings.hero_image_url}
+                              className="w-full h-full object-cover"
+                              alt="Preview"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/hero-carnaval.jpg';
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest px-2">* Recomendado: 1920x1080px</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">
+                      <Palette size={14} /> Cores da Marca
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-3">
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Primária (Azul)</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.primary_color} onChange={e => setEventSettings({ ...eventSettings, primary_color: e.target.value })} />
+                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.primary_color}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Secundária (Amarelo)</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.secondary_color} onChange={e => setEventSettings({ ...eventSettings, secondary_color: e.target.value })} />
+                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.secondary_color}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor de Destaque (Vermelho)</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.accent_color} onChange={e => setEventSettings({ ...eventSettings, accent_color: e.target.value })} />
+                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.accent_color}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">
+                      <Palette size={14} /> Cores do Título Hero
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Parte de Cima (Ex: Bloco dos)</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.title_main_color || '#FFFFFF'} onChange={e => setEventSettings({ ...eventSettings, title_main_color: e.target.value })} />
+                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.title_main_color || '#FFFFFF'}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Parte de Baixo (Ex: Mauricinhos)</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.title_highlight_color || '#FFD100'} onChange={e => setEventSettings({ ...eventSettings, title_highlight_color: e.target.value })} />
+                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.title_highlight_color || '#FFD100'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-[#002D5B]/5">
+                    <button
+                      disabled={settingsLoading}
+                      className="w-full md:w-auto bg-[#002D5B] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3"
+                    >
+                      {settingsLoading ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle2 size={18} />}
+                      Salvar Identidade do Evento
                     </button>
                   </div>
-                </div>
-              </form>
-            </div>
-
-            <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-white/50 min-h-[400px]">
-              <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 text-center">Programação Oficial</h3>
-
-              <div className="space-y-6 max-w-3xl mx-auto">
-                {attractions.length === 0 ? (
-                  <div className="text-center py-20 bg-[#002D5B]/5 rounded-[3rem] border-4 border-dashed border-[#002D5B]/10 animate-pulse">
-                    <Music className="w-16 h-16 text-[#002D5B]/10 mx-auto mb-4" />
-                    <p className="text-2xl font-black text-[#002D5B] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
-                  </div>
-                ) : (
-                  attractions.map((attr, index) => (
-                    <div key={attr.id} className={`group relative bg-white rounded-3xl p-6 shadow-xl border-2 transition-all hover:scale-[1.02] flex items-center justify-between ${attr.is_featured ? 'border-[#FFD100] bg-[#FFD100]/5 ring-4 ring-[#FFD100]/10' : 'border-white hover:border-[#FFD100]'}`}>
-                      <div className="flex items-center gap-8">
-                        <div className={`px-6 py-3 rounded-2xl font-black text-xl shadow-lg ring-4 ${attr.is_featured ? 'bg-[#002D5B] text-white ring-[#002D5B]/20' : 'bg-[#FFD100] text-[#002D5B] ring-[#FFD100]/20'}`}>{attr.time}</div>
-                        <div>
-                          <div className="flex items-center gap-3">
-                            <p className="font-black text-[#002D5B] text-2xl uppercase tracking-tighter">{attr.name}</p>
-                            {attr.is_featured && <Star size={20} className="text-[#FFD100] fill-[#FFD100]" />}
-                          </div>
-                          <p className="text-[10px] font-extrabold uppercase text-[#002D5B]/40 tracking-widest">{attr.type}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <button onClick={() => handleEditClick(attr)} className="p-4 bg-blue-50 text-blue-400 rounded-2xl hover:bg-blue-500 hover:text-white transition-all md:opacity-40 group-hover:opacity-100" title="Editar Atração"><Pencil size={20} /></button>
-                        <button onClick={() => setDeleteModal({ isOpen: true, id: attr.id || null, name: attr.name })} className="p-4 bg-red-50 text-red-400 rounded-2xl hover:bg-red-500 hover:text-white transition-all md:opacity-40 group-hover:opacity-100" title="Excluir Atração"><Trash2 size={20} /></button>
-                      </div>
-                    </div>
-                  ))
-                )}
+                </form>
               </div>
             </div>
-          </div>
-        )}
-        {activeTab === 'settings' && eventSettings && (
-          <div className="animate-fade-in space-y-8 max-w-4xl mx-auto">
-            <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#002D5B]/10">
-              <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 flex items-center gap-4">
-                <div className="bg-[#002D5B] p-3 rounded-2xl text-white"><Settings size={28} /></div>
-                Identidade do Evento
-              </h3>
-
-              <form onSubmit={handleUpdateSettings} className="space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Edição do Evento</label>
-                    <input
-                      type="text"
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                      value={eventSettings.edition}
-                      onChange={e => setEventSettings({ ...eventSettings, edition: e.target.value })}
-                      placeholder="Ex: 4ª Edição"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Selo de Ano (Header)</label>
-                    <input
-                      type="text"
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                      value={eventSettings.year_label}
-                      onChange={e => setEventSettings({ ...eventSettings, year_label: e.target.value })}
-                      placeholder="Ex: Ano IV"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Data Oficial</label>
-                    <input
-                      type="text"
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                      value={eventSettings.event_date}
-                      onChange={e => setEventSettings({ ...eventSettings, event_date: e.target.value })}
-                      placeholder="Ex: 27 de Fevereiro"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Subtítulo (Abaixo do Título)</label>
-                    <input
-                      type="text"
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                      value={eventSettings.subtitle || ''}
-                      onChange={e => setEventSettings({ ...eventSettings, subtitle: e.target.value })}
-                      placeholder="Frase curta de impacto..."
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Título (Linha 1)</label>
-                    <input
-                      type="text"
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                      value={eventSettings.title_main || ''}
-                      onChange={e => setEventSettings({ ...eventSettings, title_main: e.target.value })}
-                      placeholder="Ex: Bloco dos"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Título (Destaque)</label>
-                    <input
-                      type="text"
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                      value={eventSettings.title_highlight || ''}
-                      onChange={e => setEventSettings({ ...eventSettings, title_highlight: e.target.value })}
-                      placeholder="Ex: Mauricinhos"
-                    />
-                  </div>
-                  <div className="space-y-4 md:col-span-2">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto "Sobre o Evento" (Footer)</label>
-                    <textarea
-                      rows={3}
-                      className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
-                      value={eventSettings.about_text || ''}
-                      onChange={e => setEventSettings({ ...eventSettings, about_text: e.target.value })}
-                      placeholder="Descrição detalhada para o rodapé..."
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Imagem Hero (Banner)</label>
-                    <div className="flex flex-col gap-4">
-                      <div className="flex gap-4 items-center">
-                        <div className="flex-1 relative group cursor-pointer">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                            disabled={imageUploading}
-                          />
-                          <div className={`w-full bg-[#002D5B]/5 border-2 border-dashed rounded-2xl px-6 py-6 transition-all flex items-center justify-center gap-3 ${imageUploading ? 'border-[#002D5B]/20 animate-pulse' : 'border-[#002D5B]/20 group-hover:border-[#002D5B] group-hover:bg-[#002D5B]/5'}`}>
-                            {imageUploading ? (
-                              <>
-                                <Loader2 className="animate-spin text-[#002D5B]" size={20} />
-                                <span className="text-[10px] font-black uppercase text-[#002D5B]">Enviando...</span>
-                              </>
-                            ) : (
-                              <>
-                                <Upload className="text-[#002D5B]" size={20} />
-                                <span className="text-[10px] font-black uppercase text-[#002D5B]">Escolher Nova Foto Hero</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        <div className="w-24 h-24 rounded-2xl bg-gray-100 overflow-hidden border-4 border-white shadow-xl flex-shrink-0">
-                          <img
-                            src={eventSettings.hero_image_url}
-                            className="w-full h-full object-cover"
-                            alt="Preview"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/hero-carnaval.jpg';
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest px-2">* Recomendado: 1920x1080px</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">
-                    <Palette size={14} /> Cores da Marca
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Primária (Azul)</label>
-                      <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                        <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.primary_color} onChange={e => setEventSettings({ ...eventSettings, primary_color: e.target.value })} />
-                        <span className="font-mono text-xs font-bold uppercase">{eventSettings.primary_color}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Secundária (Amarelo)</label>
-                      <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                        <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.secondary_color} onChange={e => setEventSettings({ ...eventSettings, secondary_color: e.target.value })} />
-                        <span className="font-mono text-xs font-bold uppercase">{eventSettings.secondary_color}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor de Destaque (Vermelho)</label>
-                      <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                        <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.accent_color} onChange={e => setEventSettings({ ...eventSettings, accent_color: e.target.value })} />
-                        <span className="font-mono text-xs font-bold uppercase">{eventSettings.accent_color}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">
-                    <Palette size={14} /> Cores do Título Hero
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Parte de Cima (Ex: Bloco dos)</label>
-                      <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                        <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.title_main_color || '#FFFFFF'} onChange={e => setEventSettings({ ...eventSettings, title_main_color: e.target.value })} />
-                        <span className="font-mono text-xs font-bold uppercase">{eventSettings.title_main_color || '#FFFFFF'}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Parte de Baixo (Ex: Mauricinhos)</label>
-                      <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                        <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.title_highlight_color || '#FFD100'} onChange={e => setEventSettings({ ...eventSettings, title_highlight_color: e.target.value })} />
-                        <span className="font-mono text-xs font-bold uppercase">{eventSettings.title_highlight_color || '#FFD100'}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-[#002D5B]/5">
-                  <button
-                    disabled={settingsLoading}
-                    className="w-full md:w-auto bg-[#002D5B] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3"
-                  >
-                    {settingsLoading ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle2 size={18} />}
-                    Salvar Identidade do Evento
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-      </main>
+          )
+        }
+      </main >
 
       {/* Modal Coleta de Alimentos */}
       {
