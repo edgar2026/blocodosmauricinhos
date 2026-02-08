@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bloco dos Mauricinhos - UNINASSAU</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .bg-carnival-pattern {
+      background-color: #ffffff;
+      background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill-opacity='0.1'%3E%3Ccircle fill='%23FFD100' cx='10' cy='10' r='2'/%3E%3Ccircle fill='%23E63946' cx='50' cy='30' r='3'/%3E%3Ccircle fill='%232A9D8F' cx='100' cy='15' r='2'/%3E%3Ccircle fill='%23F4A261' cx='30' cy='80' r='4'/%3E%3Ccircle fill='%23002D5B' cx='80' cy='100' r='2'/%3E%3Cpath d='M110 90 Q 115 85 120 90 T 130 90' stroke='%23FFD100' stroke-width='1'/%3E%3Cpath d='M10 40 L 15 45 L 5 45 Z' fill='%23002D5B'/%3E%3Cpath d='M70 20 Q 75 15 80 20 T 90 20' stroke='%232A9D8F' stroke-width='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .carnival-title {
+      color: white;
+      text-shadow:
+        -2px -2px 0 #002D5B,
+        2px -2px 0 #002D5B,
+        -2px 2px 0 #002D5B,
+        2px 2px 0 #002D5B,
+        6px 6px 0px #002D5B;
+    }
+  </style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body class="bg-gray-50">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
