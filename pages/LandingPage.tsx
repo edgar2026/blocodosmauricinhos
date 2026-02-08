@@ -82,7 +82,7 @@ const LandingPage: React.FC = () => {
         {/* Subtle Admin access for managers */}
         <Link
           to="/dashboard"
-          className="absolute right-4 md:right-12 px-5 py-2.5 bg-white/10 hover:bg-[var(--secondary-color)] text-white hover:text-[var(--primary-color)] rounded-xl transition-all shadow-sm border border-white/20 group flex items-center gap-3 backdrop-blur-md"
+          className="absolute right-4 md:right-12 px-5 py-2.5 bg-white/10 hover:bg-[var(--secondary-color)] text-white hover:text-[var(--primary-color)] rounded-xl transition-all shadow-sm border border-white/20 group flex items-center gap-3 backdrop-blur-md opacity-0 hover:opacity-100"
         >
           <User size={16} className="group-hover:scale-110 transition-transform" />
           <span className="text-[10px] font-black uppercase tracking-widest hidden sm:block">Painel Gestor</span>
