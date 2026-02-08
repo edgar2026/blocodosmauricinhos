@@ -61,6 +61,8 @@ const Dashboard: React.FC = () => {
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [lastConfirmedName, setLastConfirmedName] = useState('');
 
   const commonFoods = ['Arroz', 'Feijão', 'Macarrão', 'Açúcar', 'Óleo', 'Farinha', 'Leite em pó', 'Café', 'Outros'];
   const itemsPerPage = 10;
@@ -480,11 +482,20 @@ const Dashboard: React.FC = () => {
         .eq('id', participantId);
 
       if (updateError) throw updateError;
+
+      setLastConfirmedName(selectedParticipant.name);
       setIsModalOpen(false);
       setSelectedParticipant(null);
       setSelectedFood('');
       setCustomFood('');
       setFoodWeight(1);
+
+      // Force refresh data
+      await fetchParticipants();
+      setShowSuccessModal(true);
+
+      // Small vibration effect if supported
+      if ('vibrate' in navigator) navigator.vibrate(100);
     } catch (err) {
       console.error('Erro ao atualizar entrega:', err);
       alert('Erro ao confirmar entrega. Tente novamente.');
@@ -1316,6 +1327,38 @@ const Dashboard: React.FC = () => {
           </div>
         )
       }
+
+      {/* Modal de Sucesso Customizado ✨ */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-[#002D5B]/90 backdrop-blur-xl animate-fade-in">
+          <div className="bg-white rounded-[4rem] w-full max-w-sm shadow-2xl overflow-hidden border-4 border-[#2A9D8F] animate-modal-enter text-center p-12 relative">
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#2A9D8F] via-[#FFD100] to-[#E63946]"></div>
+
+            <div className="bg-[#2A9D8F] w-24 h-24 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-[0_20px_40px_-12px_rgba(42,157,143,0.4)] rotate-12">
+              <CheckCircle2 size={48} className="text-white" />
+            </div>
+
+            <h2 className="text-[#002D5B] text-2xl font-black uppercase tracking-widest mb-2">Entrega Realizada!</h2>
+            <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.3em] mb-6">Confirmação v4.0</p>
+
+            <div className="bg-[#2A9D8F]/5 p-6 rounded-[2rem] mb-8 border-2 border-dashed border-[#2A9D8F]/20">
+              <p className="text-[#2A9D8F] font-black uppercase text-sm mb-1 italic">Voucher Validado</p>
+              <p className="text-[#002D5B] font-bold text-lg">{lastConfirmedName}</p>
+            </div>
+
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="w-full bg-[#002D5B] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+            >
+              Sensacional! 🎊
+            </button>
+
+            {/* Animating confetti placeholder */}
+            <div className="absolute top-10 right-10 text-[#FFD100] animate-bounce"><Star size={24} fill="currentColor" /></div>
+            <div className="absolute bottom-20 left-10 text-[#2A9D8F] animate-float"><Music size={20} /></div>
+          </div>
+        </div>
+      )}
 
       {/* Decorative Floating Patterns */}
       <div className="fixed top-24 right-8 flex flex-col space-y-12 opacity-[0.05] pointer-events-none animate-float"><Music size={60} /><Users size={60} /></div>
