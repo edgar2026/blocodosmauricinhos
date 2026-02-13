@@ -201,29 +201,55 @@ const LandingPage: React.FC = () => {
                   <p className="text-2xl font-black text-[#0041B6] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
                 </div>
               ) : (
-                attractions.map((item, idx) => (
-                  <div key={idx} className={`group flex flex-col md:flex-row md:items-center justify-between p-8 rounded-[2rem] transition-all border-2 ${item.is_featured
-                    ? 'bg-[#0041B6] text-white shadow-2xl scale-[1.03] ring-4 ring-[#FFD100]/20 border-[#FFD100]/50'
-                    : 'bg-white text-[#0041B6] shadow-md hover:shadow-xl hover:-translate-y-1 border-transparent hover:border-[#FFD100]'
-                    }`}>
-                    <div className="flex items-center gap-6 mb-4 md:mb-0">
-                      {item.time && (
-                        <>
-                          <div className={`p-4 rounded-2xl ${item.is_featured ? 'bg-white/10' : 'bg-[#FFD100]/10 text-[#FFD100]'}`}>
-                            {item.type === 'dj' ? <Clock size={20} /> : <Music size={20} />}
+                attractions.map((item, idx) => {
+                  const hasTime = !!item.time;
+                  return (
+                    <div
+                      key={idx}
+                      className={`group relative flex flex-col md:flex-row md:items-center ${hasTime ? 'justify-between' : 'justify-center'} p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 border-2 ${item.is_featured
+                        ? 'bg-gradient-to-br from-[#0041B6] to-[#002B7A] text-white shadow-[0_20px_50px_rgba(0,65,182,0.3)] scale-[1.02] border-[#FFD100]/40'
+                        : 'bg-white/70 backdrop-blur-md text-[#0041B6] shadow-sm hover:shadow-xl hover:-translate-y-1.5 border-white/50 hover:border-[#0041B6]/20'
+                        }`}
+                    >
+                      {/* Featured Glow Effect */}
+                      {item.is_featured && (
+                        <div className="absolute inset-0 bg-gradient-to-tr from-[#FFD100]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem] pointer-events-none"></div>
+                      )}
+
+                      <div className={`flex items-center gap-6 ${!hasTime ? 'md:absolute md:left-10' : ''}`}>
+                        {hasTime ? (
+                          <>
+                            <div className={`p-4 rounded-2xl ${item.is_featured ? 'bg-white/10 shadow-inner' : 'bg-[#FFD100]/10 text-[#FFD100]'}`}>
+                              {item.type === 'dj' ? <Clock size={20} className="animate-pulse" /> : <Music size={20} />}
+                            </div>
+                            <span className="text-2xl md:text-3xl font-black tracking-tighter tabular-nums">{item.time}</span>
+                          </>
+                        ) : (
+                          <div className={`hidden md:block p-3 rounded-xl ${item.is_featured ? 'bg-white/10' : 'bg-[#0041B6]/5 opacity-30 text-[#0041B6]'}`}>
+                            {item.type === 'dj' ? <Clock size={18} /> : <Music size={18} />}
                           </div>
-                          <span className="text-2xl font-black tracking-tighter">{item.time}</span>
-                        </>
+                        )}
+                      </div>
+
+                      <div className={`flex items-center gap-4 ${!hasTime ? 'text-center' : 'text-right'}`}>
+                        <span className={`text-2xl md:text-3xl font-black uppercase tracking-tight leading-none ${item.is_featured ? 'text-[#FFD100] drop-shadow-sm' : ''}`}>
+                          {item.name}
+                        </span>
+                        {item.is_featured && (
+                          <div className="relative">
+                            <Star size={28} className="text-[#FFD100] fill-[#FFD100] animate-bounce" />
+                            <div className="absolute inset-0 blur-md bg-[#FFD100] opacity-30 animate-pulse"></div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Line decorative for non-featured when has time */}
+                      {hasTime && !item.is_featured && (
+                        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-px h-8 bg-[#0041B6]/5"></div>
                       )}
                     </div>
-                    <div className="text-right flex items-center gap-4">
-                      <span className={`text-xl md:text-2xl font-black uppercase tracking-tight ${item.is_featured ? 'text-[#FFD100]' : ''}`}>
-                        {item.name}
-                      </span>
-                      {item.is_featured && <Star size={24} className="text-[#FFD100] fill-[#FFD100] animate-pulse" />}
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>
