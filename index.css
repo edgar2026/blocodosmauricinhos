@@ -1,13 +1,29 @@
 @layer base {
+  :root {
+    --primary-color: #0041B6;
+    --secondary-color: #FFD100;
+    --accent-color: #E63946;
+    --text-navy: #0041B6;
+  }
+
   html {
     scroll-behavior: smooth;
   }
+
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Fredoka', sans-serif !important;
+    color: var(--primary-color);
+    background-color: #f9fafb;
+  }
 }
 
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.font-sans,
+.font-serif,
+.font-mono {
+  font-family: 'Fredoka', sans-serif !important;
 }
 
 /* Custom scrollbar for better aesthetics */
@@ -20,7 +36,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #002D5B;
+  background: #0041B6;
   border-radius: 10px;
 }
 

@@ -122,9 +122,10 @@ const RegistrationForm: React.FC = () => {
     <div
       className="min-h-screen bg-carnival-pattern flex flex-col items-center"
       style={{
-        '--primary-color': settings?.primary_color || '#002D5B',
+        '--primary-color': settings?.primary_color || '#0041B6',
         '--secondary-color': settings?.secondary_color || '#FFD100',
         '--accent-color': settings?.accent_color || '#E63946',
+        fontFamily: "'Fredoka', sans-serif",
       } as React.CSSProperties}
     >
       {/* Header */}
@@ -133,7 +134,7 @@ const RegistrationForm: React.FC = () => {
         {/* Painel Admin Invisível aqui também para manter o padrão */}
         <Link
           to="/dashboard"
-          className="absolute right-8 text-[#002D5B] opacity-0 hover:opacity-100 transition-all font-black text-[8px] uppercase tracking-widest"
+          className="absolute right-8 text-[#0041B6] opacity-0 hover:opacity-100 transition-all font-black text-[8px] uppercase tracking-widest"
         >
           Acesso Restrito
         </Link>
@@ -142,16 +143,18 @@ const RegistrationForm: React.FC = () => {
       {/* Form Card */}
       <div className="w-full max-w-2xl px-4 pb-20 relative z-10">
         <div className="glass-card rounded-[3rem] border-2 border-white/40 shadow-2xl p-10 backdrop-blur-2xl relative">
-          <Link to="/" className="absolute left-8 top-8 group">
-            <div className="p-3 bg-[var(--secondary-color)] rounded-2xl group-hover:bg-[var(--primary-color)] group-hover:text-white transition-all shadow-lg flex items-center justify-center">
-              <ArrowLeft size={20} />
+          <Link to="/" className="absolute left-6 top-6 group z-20">
+            <div className="w-12 h-12 bg-[#FFD100] rounded-full group-hover:bg-[#0041B6] group-hover:text-white transition-all shadow-lg flex items-center justify-center border-2 border-white">
+              <ArrowLeft size={24} className="text-[#0041B6] group-hover:text-white" />
             </div>
           </Link>
 
           <div className="mb-10 text-center">
-            <span className="bg-[var(--secondary-color)]/20 text-[var(--primary-color)] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em]">4° Edição - Bloco dos Maurinhos</span>
-            <h2 className="text-[var(--primary-color)] text-3xl font-black mt-4 uppercase">Garanta sua Entrada</h2>
-            <p className="text-gray-500 font-medium italic mt-1">pulseiras limitadas!</p>
+            <p className="text-[#0041B6] text-[11px] font-black uppercase tracking-[0.3em] mb-2">4° Edição - Bloco dos Maurinhos</p>
+            <h2 className="text-[#0041B6] text-4xl md:text-5xl font-black uppercase tracking-tight leading-none">
+              Garanta sua Entrada
+            </h2>
+            <p className="text-gray-400 font-bold italic mt-3 text-sm">pulseiras limitadas!</p>
           </div>
 
           {submitted ? (
@@ -192,10 +195,10 @@ const RegistrationForm: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2 group">
-                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">Nome completo</label>
+                    <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">Nome completo</label>
                     <input
                       type="text"
-                      className="w-full bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
+                      className="w-full bg-white/50 border-2 border-[#0041B6]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
                       placeholder="Ex: João Mauricio"
                       value={formData.name}
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
@@ -203,11 +206,11 @@ const RegistrationForm: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">Telefone / WhatsApp</label>
+                    <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">Telefone / WhatsApp</label>
                     <input
                       type="tel"
                       placeholder="(81) 90000-0000"
-                      className="w-full bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
+                      className="w-full bg-white/50 border-2 border-[#0041B6]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
                       value={formData.phone}
                       onChange={handlePhoneChange}
                       maxLength={15}
@@ -215,22 +218,22 @@ const RegistrationForm: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">E-mail</label>
+                    <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">E-mail</label>
                     <input
                       type="email"
                       placeholder="seu.email@exemplo.com"
-                      className="w-full bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
+                      className="w-full bg-white/50 border-2 border-[#0041B6]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">Documento (CPF)</label>
+                    <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">Documento (CPF)</label>
                     <input
                       type="text"
                       placeholder="000.000.000-00"
-                      className="w-full bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
+                      className="w-full bg-white/50 border-2 border-[#0041B6]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold placeholder:text-gray-300"
                       value={formData.cpf}
                       onChange={handleCPFChange}
                       maxLength={14}
@@ -240,12 +243,12 @@ const RegistrationForm: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1 flex items-center gap-2">
+                  <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1 flex items-center gap-2">
                     Ponto de Retirada da Pulseira <span className="text-[#E63946]">*</span>
                   </label>
                   <div className="relative">
                     <select
-                      className="w-full appearance-none bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold bg-white"
+                      className="w-full appearance-none bg-white/50 border-2 border-[#0041B6]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold bg-white"
                       value={formData.unit}
                       onChange={e => setFormData({ ...formData, unit: e.target.value })}
                       required
@@ -264,12 +267,12 @@ const RegistrationForm: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1 flex items-center gap-2">
+                  <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1 flex items-center gap-2">
                     Vínculo com a Instituição <span className="text-[#E63946]">*</span>
                   </label>
                   <div className="relative">
                     <select
-                      className="w-full appearance-none bg-white/50 border-2 border-[#002D5B]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold bg-white"
+                      className="w-full appearance-none bg-white/50 border-2 border-[#0041B6]/5 rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:bg-white focus:outline-none transition-all font-bold bg-white"
                       value={formData.user_type}
                       onChange={e => setFormData({ ...formData, user_type: e.target.value })}
                       required
@@ -288,7 +291,7 @@ const RegistrationForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={clearForm}
-                    className="w-full sm:w-1/3 border-2 border-[#002D5B]/10 text-[#002D5B]/40 font-black py-4 rounded-[1.5rem] hover:bg-white hover:text-[#E63946] hover:border-[#E63946] transition-all uppercase text-xs tracking-widest"
+                    className="w-full sm:w-1/3 border-2 border-[#0041B6]/10 text-[#0041B6]/40 font-black py-4 rounded-[1.5rem] hover:bg-white hover:text-[#E63946] hover:border-[#E63946] transition-all uppercase text-xs tracking-widest"
                   >
                     Limpar Campos
                   </button>

@@ -69,9 +69,10 @@ const LandingPage: React.FC = () => {
     <div
       className="min-h-screen flex flex-col font-sans bg-white"
       style={{
-        '--primary-color': settings?.primary_color || '#002D5B',
+        '--primary-color': settings?.primary_color || '#0041B6',
         '--secondary-color': settings?.secondary_color || '#FFD100',
         '--accent-color': settings?.accent_color || '#E63946',
+        fontFamily: "'Fredoka', sans-serif",
         color: 'var(--primary-color)'
       } as React.CSSProperties}
     >
@@ -109,14 +110,14 @@ const LandingPage: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             {/* Action Section - Moved from Hero to here for a cleaner look */}
             <div className="flex flex-col items-center gap-6 mb-16 animate-modal-enter">
-              <div className="bg-[#002D5B] text-white px-6 py-2 rounded-full font-black text-sm md:text-base uppercase tracking-[0.2em] shadow-xl flex items-center gap-3">
+              <div className="bg-[#0041B6] text-white px-6 py-2 rounded-full font-black text-sm md:text-base uppercase tracking-[0.2em] shadow-xl flex items-center gap-3">
                 <Clock size={18} className="text-[#FFD100]" />
                 <span>Das 18 às 22 horas</span>
               </div>
 
               <Link
                 to="/register"
-                className="group relative bg-[#002D5B] hover:bg-[#FFD100] text-white hover:text-[#002D5B] font-black py-5 px-12 rounded-[2rem] text-xl uppercase transition-all shadow-[0_20px_40px_rgba(0,45,91,0.2)] hover:scale-105 active:scale-95 overflow-hidden border-2 border-[#002D5B]"
+                className="group relative bg-[#0041B6] hover:bg-[#FFD100] text-white hover:text-[#0041B6] font-black py-5 px-12 rounded-[2rem] text-xl uppercase transition-all shadow-[0_20px_40px_rgba(0,65,182,0.2)] hover:scale-105 active:scale-95 overflow-hidden border-2 border-[#0041B6]"
               >
                 <span className="relative z-10 flex items-center gap-3">
                   {settings?.hero_cta_text || 'Garantir Inscrição'}
@@ -129,21 +130,21 @@ const LandingPage: React.FC = () => {
 
             <div className="text-center mb-16">
               <p className="text-[#E63946] font-bold uppercase tracking-[0.3em] text-xs mb-2">Engajamento Social</p>
-              <h2 className="text-[#002D5B] text-4xl md:text-5xl font-black uppercase tracking-tight">
+              <h2 className="text-[#0041B6] text-4xl md:text-5xl font-black uppercase tracking-tight">
                 {settings?.solidarity_title || 'Alegria & Solidariedade'}
               </h2>
             </div>
 
             <div className={`grid grid-cols-1 ${settings?.show_vip_card !== false && settings?.show_solidarity_card !== false ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-10`}>
               {settings?.show_vip_card !== false && (
-                <div className="bg-gradient-to-br from-blue-50 to-white p-10 rounded-[3rem] border-2 border-[#002D5B]/5 hover:border-[#FFD100]/50 transition-all group overflow-hidden relative">
+                <div className="bg-gradient-to-br from-blue-50 to-white p-10 rounded-[3rem] border-2 border-[#0041B6]/5 hover:border-[#FFD100]/50 transition-all group overflow-hidden relative">
                   <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity">
                     <Gift size={200} />
                   </div>
                   <div className="bg-[#FFD100] p-6 rounded-[2rem] shadow-lg w-fit mb-8 group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                    <Gift className="text-[#002D5B] w-10 h-10" />
+                    <Gift className="text-[#0041B6] w-10 h-10" />
                   </div>
-                  <h3 className="text-[#002D5B] font-black text-2xl uppercase mb-3">
+                  <h3 className="text-[#0041B6] font-black text-2xl uppercase mb-3">
                     {settings?.vip_box_title || 'Pulseira VIP Exclusive'}
                   </h3>
                   <p className="text-gray-600 font-medium leading-relaxed text-lg italic">
@@ -160,7 +161,7 @@ const LandingPage: React.FC = () => {
                   <div className="bg-[#E63946] p-6 rounded-[2rem] shadow-lg w-fit mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform">
                     <Heart className="text-white w-10 h-10" />
                   </div>
-                  <h3 className="text-[#002D5B] font-black text-2xl uppercase mb-3">Ingresso Solidário</h3>
+                  <h3 className="text-[#0041B6] font-black text-2xl uppercase mb-3">Ingresso Solidário</h3>
                   <p className="text-gray-600 font-medium leading-relaxed text-lg italic">
                     {settings?.solidarity_description || (
                       <>
@@ -180,24 +181,24 @@ const LandingPage: React.FC = () => {
         <section id="programacao" className="py-24 px-4 md:px-12 bg-[#F8F9FA] relative">
           <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white to-transparent"></div>
           <div className="max-w-4xl mx-auto relative z-10">
-            <div className="flex flex-col items-center mb-16">
-              <h2 className="text-[var(--primary-color)] text-3xl font-black uppercase tracking-widest relative">
+            <div className="flex flex-col items-center mb-16 text-center">
+              <h2 className="text-[#0041B6] text-4xl md:text-5xl font-black uppercase tracking-tight relative inline-block">
                 {settings?.schedule_title || 'Programação Oficial'}
-                <span className="block h-1.5 w-full bg-[var(--secondary-color)] rounded-full mt-2"></span>
+                <span className="block h-2 w-full bg-[#FFD100] rounded-full mt-2"></span>
               </h2>
             </div>
 
             <div className="space-y-6">
               {attractions.length === 0 ? (
-                <div className="text-center py-20 bg-[#002D5B]/5 rounded-[3rem] border-4 border-dashed border-[#002D5B]/10 animate-pulse">
-                  <Music className="w-16 h-16 text-[#002D5B]/10 mx-auto mb-4" />
-                  <p className="text-2xl font-black text-[#002D5B] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
+                <div className="text-center py-20 bg-[#0041B6]/5 rounded-[3rem] border-4 border-dashed border-[#0041B6]/10 animate-pulse">
+                  <Music className="w-16 h-16 text-[#0041B6]/10 mx-auto mb-4" />
+                  <p className="text-2xl font-black text-[#0041B6] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
                 </div>
               ) : (
                 attractions.map((item, idx) => (
                   <div key={idx} className={`group flex flex-col md:flex-row md:items-center justify-between p-8 rounded-[2rem] transition-all border-2 ${item.is_featured
-                    ? 'bg-[#002D5B] text-white shadow-2xl scale-[1.03] ring-4 ring-[#FFD100]/20 border-[#FFD100]/50'
-                    : 'bg-white text-[#002D5B] shadow-md hover:shadow-xl hover:-translate-y-1 border-transparent hover:border-[#FFD100]'
+                    ? 'bg-[#0041B6] text-white shadow-2xl scale-[1.03] ring-4 ring-[#FFD100]/20 border-[#FFD100]/50'
+                    : 'bg-white text-[#0041B6] shadow-md hover:shadow-xl hover:-translate-y-1 border-transparent hover:border-[#FFD100]'
                     }`}>
                     <div className="flex items-center gap-6 mb-4 md:mb-0">
                       <div className={`p-4 rounded-2xl ${item.is_featured ? 'bg-white/10' : 'bg-[#FFD100]/10 text-[#FFD100]'}`}>
@@ -221,7 +222,7 @@ const LandingPage: React.FC = () => {
 
       {/* Footer */}
       {settings?.show_footer !== false && (
-        <footer id="contato" className="bg-gradient-to-b from-[#002D5B] to-[#001a35] text-white pt-16 pb-6">
+        <footer id="contato" className="bg-gradient-to-b from-[#0041B6] to-[#001a35] text-white pt-16 pb-6">
           <div className="px-4 md:px-12 pb-12">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
 
@@ -249,7 +250,7 @@ const LandingPage: React.FC = () => {
                     href={`https://www.instagram.com/${(settings?.footer_instagram || '@uninassau').replace('@', '')}/`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white/5 hover:bg-[#FFD100] text-white hover:text-[#002D5B] px-4 py-2.5 rounded-xl transition-all group"
+                    className="inline-flex items-center gap-2 bg-white/5 hover:bg-[#FFD100] text-white hover:text-[#0041B6] px-4 py-2.5 rounded-xl transition-all group"
                   >
                     <Instagram size={18} />
                     <span className="text-sm font-bold">{settings?.footer_instagram || '@uninassau'}</span>

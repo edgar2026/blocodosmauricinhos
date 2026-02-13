@@ -231,7 +231,7 @@ const Dashboard: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#001a35] flex items-center justify-center p-4 font-sans relative overflow-hidden">
+      <div className="min-h-screen bg-[#002B7A] flex items-center justify-center p-4 font-fredoka relative overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#FFD100]/10 rounded-full blur-[120px] animate-pulse"></div>
@@ -299,7 +299,7 @@ const Dashboard: React.FC = () => {
               <button
                 type="submit"
                 disabled={authLoading}
-                className="w-full bg-[#FFD100] hover:bg-[#ffe04d] text-[#002D5B] py-6 rounded-2xl font-black uppercase tracking-widest shadow-[0_12px_24px_-8px_rgba(255,209,0,0.4)] hover:-translate-y-1 active:scale-95 transition-all text-xs disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full bg-[#FFD100] hover:bg-[#ffe04d] text-[#0041B6] py-6 rounded-2xl font-black uppercase tracking-widest shadow-[0_12px_24px_-8px_rgba(255,209,0,0.4)] hover:-translate-y-1 active:scale-95 transition-all text-xs disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {authLoading ? (
                   <Loader2 className="animate-spin mx-auto" size={20} />
@@ -540,7 +540,7 @@ const Dashboard: React.FC = () => {
   const barData = Object.entries(unitCounts).map(([name, value], index) => ({
     name,
     value,
-    color: ['#002D5B', '#1D71BC', '#FFD100', '#2A9D8F', '#E63946'][index % 5]
+    color: ['#0041B6', '#1D71BC', '#FFD100', '#2A9D8F', '#E63946'][index % 5]
   }));
 
   const foodTypeCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
@@ -553,7 +553,7 @@ const Dashboard: React.FC = () => {
   const foodPieData = Object.entries(foodTypeCounts).map(([name, value], index) => ({
     name,
     value,
-    color: ['#FFD100', '#002D5B', '#E63946', '#2A9D8F', '#1D71BC', '#F97316', '#8E44AD'][index % 7]
+    color: ['#FFD100', '#0041B6', '#E63946', '#2A9D8F', '#1D71BC', '#F97316', '#8E44AD'][index % 7]
   }));
 
   const userTypeCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
@@ -565,7 +565,7 @@ const Dashboard: React.FC = () => {
   const userTypePieData = Object.entries(userTypeCounts).map(([name, value], index) => ({
     name,
     value,
-    color: ['#002D5B', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5]
+    color: ['#0041B6', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5]
   }));
 
   const filteredParticipants = participants.filter(p => {
@@ -586,7 +586,7 @@ const Dashboard: React.FC = () => {
   // If we are loading for the first time or have a critical error
   if (loading && participants.length === 0 && !error) {
     return (
-      <div className="min-h-screen bg-[#002D5B] flex flex-col items-center justify-center p-8">
+      <div className="min-h-screen bg-[#0041B6] flex flex-col items-center justify-center p-8">
         <div className="relative">
           <div className="w-24 h-24 border-4 border-[#FFD100]/20 border-t-[#FFD100] rounded-full animate-spin"></div>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -600,14 +600,14 @@ const Dashboard: React.FC = () => {
 
   if (error && participants.length === 0) {
     return (
-      <div className="min-h-screen bg-[#002D5B] flex flex-col items-center justify-center p-8 text-center">
+      <div className="min-h-screen bg-[#0041B6] flex flex-col items-center justify-center p-8 text-center">
         <div className="bg-red-500/10 p-6 rounded-[2rem] border-2 border-red-500/20 max-w-sm">
           <AlertCircle size={48} className="text-red-500 mx-auto mb-4" />
           <h2 className="text-white text-xl font-black uppercase tracking-widest mb-2">Erro de Conexão</h2>
           <p className="text-white/60 text-sm font-bold mb-6">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="w-full bg-white text-[#002D5B] py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#FFD100] transition-all"
+            className="w-full bg-white text-[#0041B6] py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#FFD100] transition-all"
           >
             Tentar Novamente
           </button>
@@ -617,8 +617,8 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] flex flex-col font-sans text-[#002D5B] bg-carnival-pattern">
-      <header className="bg-[#002D5B] px-8 py-4 flex items-center justify-between shadow-xl border-b-4 border-[#FFD100] sticky top-0 z-50">
+    <div className="min-h-screen bg-[#F0F2F5] flex flex-col font-fredoka text-[#0041B6] bg-carnival-pattern">
+      <header className="bg-[#0041B6] px-8 py-4 flex items-center justify-between shadow-xl border-b-4 border-[#FFD100] sticky top-0 z-50">
         <div className="flex items-center space-x-6">
           <Logo className="h-10" />
           <h1 className="text-white text-sm font-black uppercase tracking-[0.2em] hidden md:block border-l-2 border-white/20 pl-6">
@@ -655,7 +655,7 @@ const Dashboard: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-[#002D5B] text-white shadow-xl scale-105' : 'text-[#002D5B]/60 hover:bg-white/50'}`}
+                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-[#0041B6] text-white shadow-xl scale-105' : 'text-[#0041B6]/60 hover:bg-white/50'}`}
               >
                 {tab.label}
               </button>
@@ -670,10 +670,10 @@ const Dashboard: React.FC = () => {
               <div className="glass-card p-6 rounded-[2.5rem] shadow-2xl border-b-8 border-[#FFD100] group hover:-translate-y-2 transition-all relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-10 transition-opacity"><Users size={100} /></div>
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="bg-[#FFD100] p-4 rounded-2xl shadow-lg"><Users className="text-[#002D5B]" size={28} /></div>
+                  <div className="bg-[#FFD100] p-4 rounded-2xl shadow-lg"><Users className="text-[#0041B6]" size={28} /></div>
                   <div>
-                    <p className="text-[#002D5B] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Total de Inscritos</p>
-                    <h3 className="text-[#002D5B] text-3xl font-black tracking-tighter">{loading ? '...' : totalInscritos.toLocaleString('pt-BR')}</h3>
+                    <p className="text-[#0041B6] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Total de Inscritos</p>
+                    <h3 className="text-[#0041B6] text-3xl font-black tracking-tighter">{loading ? '...' : totalInscritos.toLocaleString('pt-BR')}</h3>
                   </div>
                 </div>
               </div>
@@ -683,8 +683,8 @@ const Dashboard: React.FC = () => {
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="bg-[#2A9D8F] p-4 rounded-2xl shadow-lg"><Ticket className="text-white" size={28} /></div>
                   <div>
-                    <p className="text-[#002D5B] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Pulseiras Entregues</p>
-                    <h3 className="text-[#002D5B] text-3xl font-black tracking-tighter">{loading ? '...' : totalEntregues.toLocaleString('pt-BR')}</h3>
+                    <p className="text-[#0041B6] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Pulseiras Entregues</p>
+                    <h3 className="text-[#0041B6] text-3xl font-black tracking-tighter">{loading ? '...' : totalEntregues.toLocaleString('pt-BR')}</h3>
                   </div>
                 </div>
               </div>
@@ -694,8 +694,8 @@ const Dashboard: React.FC = () => {
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="bg-[#1D71BC] p-4 rounded-2xl shadow-lg"><ShoppingBasket className="text-white" size={28} /></div>
                   <div>
-                    <p className="text-[#002D5B] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Total Alimentos (KG)</p>
-                    <h3 className="text-[#002D5B] text-3xl font-black tracking-tighter">{loading ? '...' : totalFoodKg.toLocaleString('pt-BR')}kg</h3>
+                    <p className="text-[#0041B6] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Total Alimentos (KG)</p>
+                    <h3 className="text-[#0041B6] text-3xl font-black tracking-tighter">{loading ? '...' : totalFoodKg.toLocaleString('pt-BR')}kg</h3>
                   </div>
                 </div>
               </div>
@@ -705,8 +705,8 @@ const Dashboard: React.FC = () => {
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="bg-[#E63946] p-4 rounded-2xl shadow-lg"><CheckCircle2 className="text-white" size={28} /></div>
                   <div>
-                    <p className="text-[#002D5B] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Entregas Hoje</p>
-                    <h3 className="text-[#002D5B] text-3xl font-black tracking-tighter">{loading ? '...' : entreguesHoje.toLocaleString('pt-BR')}</h3>
+                    <p className="text-[#0041B6] text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Entregas Hoje</p>
+                    <h3 className="text-[#0041B6] text-3xl font-black tracking-tighter">{loading ? '...' : entreguesHoje.toLocaleString('pt-BR')}</h3>
                   </div>
                 </div>
               </div>
@@ -715,18 +715,18 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
               <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
                 <div className="flex items-center justify-between mb-10">
-                  <h4 className="text-[#002D5B] font-black uppercase tracking-widest text-xs">Arrecadação por Tipo de Alimento (KG)</h4>
+                  <h4 className="text-[#0041B6] font-black uppercase tracking-widest text-xs">Arrecadação por Tipo de Alimento (KG)</h4>
                   <div className="bg-[#1D71BC] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">Total: {totalFoodKg}kg</div>
                 </div>
                 <div className="h-[400px] w-full">
                   {foodPieData && foodPieData.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={foodPieData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#002D5B', fontSize: 10, fontWeight: 800 }} />
+                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#0041B6', fontSize: 10, fontWeight: 800 }} />
                         <YAxis hide />
                         <Tooltip
                           contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                          cursor={{ fill: '#002D5B', fillOpacity: 0.05 }}
+                          cursor={{ fill: '#0041B6', fillOpacity: 0.05 }}
                           formatter={(value: any) => [value, ""]}
                         />
                         <Bar dataKey="value" radius={[10, 10, 0, 0]} barSize={40}>
@@ -737,7 +737,7 @@ const Dashboard: React.FC = () => {
                             dataKey="value"
                             position="top"
                             formatter={(v: number) => `${v}kg`}
-                            style={{ fill: '#002D5B', fontSize: 12, fontWeight: 900 }}
+                            style={{ fill: '#0041B6', fontSize: 12, fontWeight: 900 }}
                           />
                         </Bar>
                       </BarChart>
@@ -754,16 +754,16 @@ const Dashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
-                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade</h4>
+                <h4 className="text-[#0041B6] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade</h4>
                 <div className="h-[300px] w-full">
                   {barData && barData.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={barData} layout="vertical" margin={{ top: 5, right: 40, left: 40, bottom: 5 }}>
                         <XAxis type="number" hide />
-                        <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#002D5B', fontSize: 10, fontWeight: 800 }} width={100} />
+                        <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#0041B6', fontSize: 10, fontWeight: 800 }} width={100} />
                         <Tooltip
                           contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                          cursor={{ fill: '#002D5B', fillOpacity: 0.05 }}
+                          cursor={{ fill: '#0041B6', fillOpacity: 0.05 }}
                           formatter={(value: any) => [value, ""]}
                         />
                         <Bar dataKey="value" radius={[0, 10, 10, 0]} barSize={30}>
@@ -773,7 +773,7 @@ const Dashboard: React.FC = () => {
                           <LabelList
                             dataKey="value"
                             position="right"
-                            style={{ fill: '#002D5B', fontSize: 12, fontWeight: 900 }}
+                            style={{ fill: '#0041B6', fontSize: 12, fontWeight: 900 }}
                           />
                         </Bar>
                       </BarChart>
@@ -788,7 +788,7 @@ const Dashboard: React.FC = () => {
               </div>
 
               <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
-                <h4 className="text-[#002D5B] text-center font-black uppercase tracking-widest text-xs mb-10">Perfil do Público</h4>
+                <h4 className="text-[#0041B6] text-center font-black uppercase tracking-widest text-xs mb-10">Perfil do Público</h4>
                 <div className="flex-1 min-h-[300px] relative">
                   {userTypePieData && userTypePieData.length > 0 ? (
                     <>
@@ -817,7 +817,7 @@ const Dashboard: React.FC = () => {
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
                         <div>
                           <p className="text-[10px] font-black uppercase opacity-40">Total</p>
-                          <p className="text-2xl font-black text-[#002D5B]">{totalInscritos}</p>
+                          <p className="text-2xl font-black text-[#0041B6]">{totalInscritos}</p>
                         </div>
                       </div>
                     </>
@@ -838,21 +838,21 @@ const Dashboard: React.FC = () => {
             <div className="glass-card p-8 rounded-[3rem] shadow-2xl border-4 border-[#FFD100]/30 animate-fade-in bg-white/40">
               <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
                 <div className="flex-1 w-full relative">
-                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#002D5B] opacity-30" size={24} />
+                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#0041B6] opacity-30" size={24} />
                   <input
                     type="text"
                     placeholder="Buscar folião por Nome, CPF ou E-mail..."
-                    className="w-full bg-white border-2 border-[#002D5B]/5 rounded-3xl py-6 pl-16 pr-8 focus:border-[#FFD100] focus:outline-none shadow-xl font-bold placeholder:opacity-30 transition-all text-lg"
+                    className="w-full bg-white border-2 border-[#0041B6]/5 rounded-3xl py-6 pl-16 pr-8 focus:border-[#FFD100] focus:outline-none shadow-xl font-bold placeholder:opacity-30 transition-all text-lg"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="overflow-x-auto rounded-[2rem] border-2 border-[#002D5B]/5 bg-white/80">
+              <div className="overflow-x-auto rounded-[2rem] border-2 border-[#0041B6]/5 bg-white/80">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-[#002D5B] text-white">
+                    <tr className="bg-[#0041B6] text-white">
                       <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest rounded-tl-[2rem]">Folião</th>
                       <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">CPF</th>
                       <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Unidade</th>
@@ -864,15 +864,15 @@ const Dashboard: React.FC = () => {
                     {loading ? (
                       <tr><td colSpan={5} className="text-center py-20"><Loader2 className="w-12 h-12 animate-spin inline-block text-[#FFD100]" /></td></tr>
                     ) : paginatedParticipants.map((p, index) => (
-                      <tr key={p.id || index} className="group hover:bg-[#FFD100]/5 transition-colors border-b border-[#002D5B]/5 last:border-0">
-                        <td className="px-10 py-6"><p className="font-extrabold text-[#002D5B]">{p.name}</p></td>
-                        <td className="px-6 py-6 text-center font-mono text-xs text-[#002D5B]/60 font-bold">{p.cpf}</td>
-                        <td className="px-6 py-6 text-center"><span className="bg-[#002D5B]/5 text-[#002D5B] px-4 py-1 rounded-lg text-[10px] font-black uppercase">{p.unit}</span></td>
+                      <tr key={p.id || index} className="group hover:bg-[#FFD100]/5 transition-colors border-b border-[#0041B6]/5 last:border-0">
+                        <td className="px-10 py-6"><p className="font-extrabold text-[#0041B6]">{p.name}</p></td>
+                        <td className="px-6 py-6 text-center font-mono text-xs text-[#0041B6]/60 font-bold">{p.cpf}</td>
+                        <td className="px-6 py-6 text-center"><span className="bg-[#0041B6]/5 text-[#0041B6] px-4 py-1 rounded-lg text-[10px] font-black uppercase">{p.unit}</span></td>
                         <td className="px-6 py-6 text-center">
                           {p.bracelet_delivered ? (
                             <div className="inline-flex items-center gap-2 bg-[#2A9D8F]/10 text-[#2A9D8F] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#2A9D8F]/20"><CheckCircle2 size={12} /> Entregue</div>
                           ) : (
-                            <div className="inline-flex items-center gap-2 bg-[#FFD100]/10 text-[#002D5B] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#FFD100]/40"><Clock size={12} /> Pendente</div>
+                            <div className="inline-flex items-center gap-2 bg-[#FFD100]/10 text-[#0041B6] px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-[#FFD100]/40"><Clock size={12} /> Pendente</div>
                           )}
                         </td>
                         <td className="px-10 py-6 text-center">
@@ -901,22 +901,22 @@ const Dashboard: React.FC = () => {
           activeTab === 'schedule' && (
             <div className="animate-fade-in space-y-8">
               <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#1D71BC]/30">
-                <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-8 flex items-center gap-4">
+                <h3 className="text-xl font-black text-[#0041B6] uppercase tracking-widest mb-8 flex items-center gap-4">
                   <div className={`${editingId ? 'bg-orange-500' : 'bg-[#1D71BC]'} p-3 rounded-2xl text-white transition-colors`}><Calendar size={24} /></div>
                   {editingId ? 'Editar Atração' : 'Nova Atração'}
                 </h3>
                 <form onSubmit={handleAddAttraction} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Nome da Atração</label>
-                    <input type="text" placeholder="Ex: Banda de Frevo" className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.name} onChange={e => setNewAttraction({ ...newAttraction, name: e.target.value })} />
+                    <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Nome da Atração</label>
+                    <input type="text" placeholder="Ex: Banda de Frevo" className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.name} onChange={e => setNewAttraction({ ...newAttraction, name: e.target.value })} />
                   </div>
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Horário</label>
-                    <input type="time" className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.time} onChange={e => setNewAttraction({ ...newAttraction, time: e.target.value })} />
+                    <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Horário</label>
+                    <input type="time" className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.time} onChange={e => setNewAttraction({ ...newAttraction, time: e.target.value })} />
                   </div>
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Tipo</label>
-                    <select className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.type} onChange={e => setNewAttraction({ ...newAttraction, type: e.target.value })}>
+                    <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Tipo</label>
+                    <select className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#1D71BC] focus:bg-white focus:outline-none transition-all font-bold" value={newAttraction.type} onChange={e => setNewAttraction({ ...newAttraction, type: e.target.value })}>
                       <option value="banda">Banda / Show</option>
                       <option value="dj">DJ Set</option>
                       <option value="outro">Outro</option>
@@ -930,14 +930,14 @@ const Dashboard: React.FC = () => {
                         checked={newAttraction.is_featured}
                         onChange={e => setNewAttraction({ ...newAttraction, is_featured: e.target.checked })}
                       />
-                      <span className="text-[10px] font-black uppercase text-[#002D5B] group-hover:text-[#1D71BC] transition-colors">Destaque Principal ★</span>
+                      <span className="text-[10px] font-black uppercase text-[#0041B6] group-hover:text-[#1D71BC] transition-colors">Destaque Principal ★</span>
                     </label>
                     <div className="flex gap-4">
                       {editingId && (
                         <button
                           type="button"
                           onClick={() => { setEditingId(null); setNewAttraction({ name: '', time: '', type: 'banda', is_featured: false }); }}
-                          className="flex-1 bg-gray-100 text-gray-500 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all font-sans"
+                          className="flex-1 bg-gray-100 text-gray-500 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all font-fredoka"
                         >
                           Cancelar
                         </button>
@@ -952,25 +952,25 @@ const Dashboard: React.FC = () => {
               </div>
 
               <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-white/50 min-h-[400px]">
-                <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 text-center">Programação Oficial</h3>
+                <h3 className="text-xl font-black text-[#0041B6] uppercase tracking-widest mb-10 text-center">Programação Oficial</h3>
 
                 <div className="space-y-6 max-w-3xl mx-auto">
                   {attractions.length === 0 ? (
-                    <div className="text-center py-20 bg-[#002D5B]/5 rounded-[3rem] border-4 border-dashed border-[#002D5B]/10 animate-pulse">
-                      <Music className="w-16 h-16 text-[#002D5B]/10 mx-auto mb-4" />
-                      <p className="text-2xl font-black text-[#002D5B] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
+                    <div className="text-center py-20 bg-[#0041B6]/5 rounded-[3rem] border-4 border-dashed border-[#0041B6]/10 animate-pulse">
+                      <Music className="w-16 h-16 text-[#0041B6]/10 mx-auto mb-4" />
+                      <p className="text-2xl font-black text-[#0041B6] opacity-20 uppercase tracking-[0.3em]">Programação a ser definida</p>
                     </div>
                   ) : (
                     attractions.map((attr, index) => (
                       <div key={attr.id} className={`group relative bg-white rounded-3xl p-6 shadow-xl border-2 transition-all hover:scale-[1.02] flex items-center justify-between ${attr.is_featured ? 'border-[#FFD100] bg-[#FFD100]/5 ring-4 ring-[#FFD100]/10' : 'border-white hover:border-[#FFD100]'}`}>
                         <div className="flex items-center gap-8">
-                          <div className={`px-6 py-3 rounded-2xl font-black text-xl shadow-lg ring-4 ${attr.is_featured ? 'bg-[#002D5B] text-white ring-[#002D5B]/20' : 'bg-[#FFD100] text-[#002D5B] ring-[#FFD100]/20'}`}>{attr.time}</div>
+                          <div className={`px-6 py-3 rounded-2xl font-black text-xl shadow-lg ring-4 ${attr.is_featured ? 'bg-[#0041B6] text-white ring-[#0041B6]/20' : 'bg-[#FFD100] text-[#0041B6] ring-[#FFD100]/20'}`}>{attr.time}</div>
                           <div>
                             <div className="flex items-center gap-3">
-                              <p className="font-black text-[#002D5B] text-2xl uppercase tracking-tighter">{attr.name}</p>
+                              <p className="font-black text-[#0041B6] text-2xl uppercase tracking-tighter">{attr.name}</p>
                               {attr.is_featured && <Star size={20} className="text-[#FFD100] fill-[#FFD100]" />}
                             </div>
-                            <p className="text-[10px] font-extrabold uppercase text-[#002D5B]/40 tracking-widest">{attr.type}</p>
+                            <p className="text-[10px] font-extrabold uppercase text-[#0041B6]/40 tracking-widest">{attr.type}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -988,43 +988,43 @@ const Dashboard: React.FC = () => {
         {
           activeTab === 'settings' && eventSettings && (
             <div className="animate-fade-in space-y-8 max-w-4xl mx-auto pb-20">
-              <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#002D5B]/10">
-                <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 flex items-center gap-4">
-                  <div className="bg-[#002D5B] p-3 rounded-2xl text-white"><Settings size={28} /></div>
+              <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#0041B6]/10">
+                <h3 className="text-xl font-black text-[#0041B6] uppercase tracking-widest mb-10 flex items-center gap-4">
+                  <div className="bg-[#0041B6] p-3 rounded-2xl text-white"><Settings size={28} /></div>
                   Identidade do Evento
                 </h3>
 
                 <form onSubmit={handleUpdateSettings} className="space-y-12">
                   {/* Design & Mídia - Cores apenas */}
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">Identidade Visual (Cores)</h4>
+                    <h4 className="text-[10px] font-black uppercase text-[#0041B6]/30 border-b border-[#0041B6]/5 pb-2 flex items-center gap-2">Identidade Visual (Cores)</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Primária</label>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                        <label className="text-[9px] font-black uppercase text-[#0041B6]/60 ml-1">Cor Primária</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#0041B6]/5 shadow-sm">
                           <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.primary_color} onChange={e => setEventSettings({ ...eventSettings, primary_color: e.target.value })} />
                           <span className="font-mono text-xs font-bold uppercase">{eventSettings.primary_color}</span>
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Secundária</label>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                        <label className="text-[9px] font-black uppercase text-[#0041B6]/60 ml-1">Cor Secundária</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#0041B6]/5 shadow-sm">
                           <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.secondary_color} onChange={e => setEventSettings({ ...eventSettings, secondary_color: e.target.value })} />
                           <span className="font-mono text-xs font-bold uppercase">{eventSettings.secondary_color}</span>
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor de Destaque</label>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
+                        <label className="text-[9px] font-black uppercase text-[#0041B6]/60 ml-1">Cor de Destaque</label>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#0041B6]/5 shadow-sm">
                           <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.accent_color} onChange={e => setEventSettings({ ...eventSettings, accent_color: e.target.value })} />
                           <span className="font-mono text-xs font-bold uppercase">{eventSettings.accent_color}</span>
                         </div>
                       </div>
-                      <div className="space-y-4 md:col-span-3 pt-6 border-t border-[#002D5B]/5">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Botão Hero</label>
+                      <div className="space-y-4 md:col-span-3 pt-6 border-t border-[#0041B6]/5">
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Texto do Botão Hero</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.hero_cta_text || ''}
                           onChange={e => setEventSettings({ ...eventSettings, hero_cta_text: e.target.value })}
                           placeholder="Ex: Garantir Inscrição"
@@ -1035,49 +1035,49 @@ const Dashboard: React.FC = () => {
 
                   {/* Solidariedade & Programação */}
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2">Conteúdo das Seções</h4>
+                    <h4 className="text-[10px] font-black uppercase text-[#0041B6]/30 border-b border-[#0041B6]/5 pb-2">Conteúdo das Seções</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Título Solidariedade</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Título Solidariedade</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.solidarity_title || ''}
                           onChange={e => setEventSettings({ ...eventSettings, solidarity_title: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Descrição Solidariedade</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Descrição Solidariedade</label>
                         <textarea
                           rows={2}
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold resize-none"
                           value={eventSettings.solidarity_description || ''}
                           onChange={e => setEventSettings({ ...eventSettings, solidarity_description: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Título VIP Box</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Título VIP Box</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.vip_box_title || ''}
                           onChange={e => setEventSettings({ ...eventSettings, vip_box_title: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Descrição VIP Box</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Descrição VIP Box</label>
                         <textarea
                           rows={2}
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold resize-none"
                           value={eventSettings.vip_box_description || ''}
                           onChange={e => setEventSettings({ ...eventSettings, vip_box_description: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4 md:col-span-2">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Título Programação</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Título Programação</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.schedule_title || ''}
                           onChange={e => setEventSettings({ ...eventSettings, schedule_title: e.target.value })}
                         />
@@ -1087,40 +1087,40 @@ const Dashboard: React.FC = () => {
 
                   {/* Rodapé & Contato */}
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2">Rodapé & Contato</h4>
+                    <h4 className="text-[10px] font-black uppercase text-[#0041B6]/30 border-b border-[#0041B6]/5 pb-2">Rodapé & Contato</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Endereço</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Endereço</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.footer_address || ''}
                           onChange={e => setEventSettings({ ...eventSettings, footer_address: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Instagram (@...)</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Instagram (@...)</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.footer_instagram || ''}
                           onChange={e => setEventSettings({ ...eventSettings, footer_instagram: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Telefone</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Telefone</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.footer_phone || ''}
                           onChange={e => setEventSettings({ ...eventSettings, footer_phone: e.target.value })}
                         />
                       </div>
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Copyright</label>
+                        <label className="text-[10px] font-black uppercase text-[#0041B6]/50 ml-1 tracking-widest">Copyright</label>
                         <input
                           type="text"
-                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#0041B6] focus:bg-white focus:outline-none transition-all font-bold"
                           value={eventSettings.footer_copyright || ''}
                           onChange={e => setEventSettings({ ...eventSettings, footer_copyright: e.target.value })}
                         />
@@ -1130,7 +1130,7 @@ const Dashboard: React.FC = () => {
 
                   {/* Visibilidade */}
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2">Visibilidade</h4>
+                    <h4 className="text-[10px] font-black uppercase text-[#0041B6]/30 border-b border-[#0041B6]/5 pb-2">Visibilidade</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {[
                         { id: 'show_hero', label: 'Início' },
@@ -1140,8 +1140,8 @@ const Dashboard: React.FC = () => {
                         { id: 'show_schedule', label: 'Programação' },
                         { id: 'show_footer', label: 'Rodapé' },
                       ].map(toggle => (
-                        <div key={toggle.id} className="flex flex-col gap-2 p-4 bg-[#002D5B]/5 rounded-2xl">
-                          <span className="text-[9px] font-black uppercase text-[#002D5B]/40">{toggle.label}</span>
+                        <div key={toggle.id} className="flex flex-col gap-2 p-4 bg-[#0041B6]/5 rounded-2xl">
+                          <span className="text-[9px] font-black uppercase text-[#0041B6]/40">{toggle.label}</span>
                           <button
                             type="button"
                             onClick={() => setEventSettings({ ...eventSettings, [toggle.id]: !eventSettings[toggle.id as keyof EventSettings] })}
@@ -1154,11 +1154,11 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="pt-10 border-t border-[#002D5B]/5">
+                  <div className="pt-10 border-t border-[#0041B6]/5">
                     <button
                       disabled={settingsLoading}
                       type="submit"
-                      className="w-full md:w-auto bg-[#002D5B] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                      className="w-full md:w-auto bg-[#0041B6] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
                       {settingsLoading ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle2 size={18} />}
                       Salvar Tudo ✨
@@ -1173,7 +1173,7 @@ const Dashboard: React.FC = () => {
 
       {/* Modal Detalhes do Participante */}
       {isDetailModalOpen && selectedParticipant && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#002D5B]/60 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0041B6]/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-[3rem] w-full max-w-2xl shadow-2xl overflow-hidden border-4 border-[#1D71BC] animate-modal-enter">
             <div className="bg-[#1D71BC] p-8 text-white relative">
               <button onClick={() => setIsDetailModalOpen(false)} className="absolute top-8 right-8 text-white/40 hover:text-white transition-colors"><X size={24} /></button>
@@ -1189,27 +1189,27 @@ const Dashboard: React.FC = () => {
               <div className="grid grid-cols-2 gap-8">
                 <div>
                   <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Nome Completo</label>
-                  <p className="text-[#002D5B] font-black text-lg">{selectedParticipant.name}</p>
+                  <p className="text-[#0041B6] font-black text-lg">{selectedParticipant.name}</p>
                 </div>
                 <div>
                   <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">CPF</label>
-                  <p className="text-[#002D5B] font-bold font-mono">{selectedParticipant.cpf}</p>
+                  <p className="text-[#0041B6] font-bold font-mono">{selectedParticipant.cpf}</p>
                 </div>
                 <div>
                   <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">E-mail</label>
-                  <p className="text-[#002D5B] font-bold">{selectedParticipant.email}</p>
+                  <p className="text-[#0041B6] font-bold">{selectedParticipant.email}</p>
                 </div>
                 <div>
                   <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Telefone</label>
-                  <p className="text-[#002D5B] font-bold">{selectedParticipant.phone}</p>
+                  <p className="text-[#0041B6] font-bold">{selectedParticipant.phone}</p>
                 </div>
                 <div>
                   <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Unidade</label>
-                  <p className="text-[#002D5B] font-black uppercase">{selectedParticipant.unit}</p>
+                  <p className="text-[#0041B6] font-black uppercase">{selectedParticipant.unit}</p>
                 </div>
                 <div>
                   <label className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1">Vínculo</label>
-                  <p className="text-[#002D5B] font-black uppercase">{selectedParticipant.user_type || 'Não Informado'}</p>
+                  <p className="text-[#0041B6] font-black uppercase">{selectedParticipant.user_type || 'Não Informado'}</p>
                 </div>
               </div>
 
@@ -1240,7 +1240,7 @@ const Dashboard: React.FC = () => {
               <div className="pt-6 flex gap-4">
                 <button
                   onClick={() => setIsDetailModalOpen(false)}
-                  className="flex-1 bg-[#002D5B] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-[1.02] transition-all"
+                  className="flex-1 bg-[#0041B6] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-[1.02] transition-all"
                 >
                   Fechar Detalhes
                 </button>
@@ -1259,12 +1259,12 @@ const Dashboard: React.FC = () => {
       {/* Modal Coleta de Alimentos */}
       {
         isModalOpen && selectedParticipant && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#002D5B]/60 backdrop-blur-sm animate-fade-in">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0041B6]/60 backdrop-blur-sm animate-fade-in">
             <div className="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl overflow-hidden border-4 border-[#FFD100] animate-modal-enter">
-              <div className="bg-[#002D5B] p-8 text-white relative">
+              <div className="bg-[#0041B6] p-8 text-white relative">
                 <button onClick={() => setIsModalOpen(false)} className="absolute top-8 right-8 text-white/40 hover:text-white transition-colors"><X size={24} /></button>
                 <div className="flex items-center gap-4 mb-2">
-                  <div className="bg-[#FFD100] p-3 rounded-2xl"><ShoppingBasket className="text-[#002D5B]" size={24} /></div>
+                  <div className="bg-[#FFD100] p-3 rounded-2xl"><ShoppingBasket className="text-[#0041B6]" size={24} /></div>
                   <div>
                     <h2 className="text-xl font-black uppercase tracking-widest">Coleta de Alimentos</h2>
                     <p className="text-white/50 text-[10px] font-bold uppercase tracking-[0.2em]">Folião: {selectedParticipant.name}</p>
@@ -1273,28 +1273,28 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="p-10 space-y-8">
                 <div className="space-y-4">
-                  <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">Selecione o Alimento</label>
+                  <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">Selecione o Alimento</label>
                   <div className="grid grid-cols-3 gap-3">
                     {commonFoods.map(food => (
-                      <button key={food} onClick={() => setSelectedFood(food)} className={`py-3 px-2 rounded-2xl text-[10px] font-black uppercase border-2 transition-all ${selectedFood === food ? 'bg-[#FFD100] border-[#FFD100] text-[#002D5B] shadow-lg scale-105' : 'bg-white border-[#002D5B]/5 text-[#002D5B]/60 hover:border-[#FFD100]/30'}`}>{food}</button>
+                      <button key={food} onClick={() => setSelectedFood(food)} className={`py-3 px-2 rounded-2xl text-[10px] font-black uppercase border-2 transition-all ${selectedFood === food ? 'bg-[#FFD100] border-[#FFD100] text-[#0041B6] shadow-lg scale-105' : 'bg-white border-[#0041B6]/5 text-[#0041B6]/60 hover:border-[#FFD100]/30'}`}>{food}</button>
                     ))}
                   </div>
                 </div>
                 {selectedFood === 'Outros' && (
                   <div className="space-y-4 animate-slide-up">
-                    <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">Especifique o Alimento</label>
-                    <input type="text" placeholder="Ex: Leite condensado..." className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:outline-none transition-all font-bold" value={customFood} onChange={(e) => setCustomFood(e.target.value)} autoFocus />
+                    <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">Especifique o Alimento</label>
+                    <input type="text" placeholder="Ex: Leite condensado..." className="w-full bg-[#0041B6]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#FFD100] focus:outline-none transition-all font-bold" value={customFood} onChange={(e) => setCustomFood(e.target.value)} autoFocus />
                   </div>
                 )}
                 <div className="space-y-4">
-                  <label className="text-[#002D5B] font-black text-[10px] uppercase tracking-widest ml-1">Quantidade (KG)</label>
+                  <label className="text-[#0041B6] font-black text-[10px] uppercase tracking-widest ml-1">Quantidade (KG)</label>
                   <div className="flex items-center gap-6">
                     <input type="range" min="1" max="10" step="0.5" className="flex-1 accent-[#FFD100]" value={foodWeight} onChange={(e) => setFoodWeight(parseFloat(e.target.value))} />
-                    <div className="bg-[#002D5B] text-[#FFD100] px-6 py-3 rounded-2xl font-black text-lg min-w-[80px] text-center">{foodWeight}kg</div>
+                    <div className="bg-[#0041B6] text-[#FFD100] px-6 py-3 rounded-2xl font-black text-lg min-w-[80px] text-center">{foodWeight}kg</div>
                   </div>
                 </div>
                 <div className="flex gap-4 pt-4">
-                  <button onClick={() => setIsModalOpen(false)} className="flex-1 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest text-[#002D5B]/40 hover:bg-red-50 transition-all">Cancelar</button>
+                  <button onClick={() => setIsModalOpen(false)} className="flex-1 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest text-[#0041B6]/40 hover:bg-red-50 transition-all">Cancelar</button>
                   <button disabled={!selectedFood || (selectedFood === 'Outros' && !customFood)} onClick={() => handleConfirmDelivery(selectedParticipant.id!, foodWeight, selectedFood === 'Outros' ? customFood : selectedFood)} className="flex-[2] bg-[#2A9D8F] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Confirmar e Entregar✨</button>
                 </div>
               </div>
@@ -1306,7 +1306,7 @@ const Dashboard: React.FC = () => {
       {/* Modal Confirmação de Exclusão */}
       {
         deleteModal.isOpen && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-[#002D5B]/80 backdrop-blur-md animate-fade-in">
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-[#0041B6]/80 backdrop-blur-md animate-fade-in">
             <div className="bg-white rounded-[2.5rem] w-full max-w-md shadow-2xl overflow-hidden border-4 border-[#E63946] animate-modal-enter">
               <div className="bg-[#E63946] p-8 text-white text-center relative">
                 <div className="bg-white/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white/30">
@@ -1315,7 +1315,7 @@ const Dashboard: React.FC = () => {
                 <h2 className="text-2xl font-black uppercase tracking-widest">Atenção!</h2>
               </div>
               <div className="p-8 text-center space-y-6">
-                <p className="text-[#002D5B] font-bold text-lg leading-relaxed">
+                <p className="text-[#0041B6] font-bold text-lg leading-relaxed">
                   Você tem certeza que deseja excluir a atração <br />
                   <span className="text-[#E63946] font-black uppercase text-xl mt-2 block italic">"{deleteModal.name}"</span>?
                 </p>
@@ -1342,7 +1342,7 @@ const Dashboard: React.FC = () => {
 
       {/* Modal de Sucesso Customizado ✨ */}
       {showSuccessModal && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-[#002D5B]/90 backdrop-blur-xl animate-fade-in">
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-[#0041B6]/90 backdrop-blur-xl animate-fade-in">
           <div className="bg-white rounded-[4rem] w-full max-w-sm shadow-2xl overflow-hidden border-4 border-[#2A9D8F] animate-modal-enter text-center p-12 relative">
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#2A9D8F] via-[#FFD100] to-[#E63946]"></div>
 
@@ -1350,17 +1350,17 @@ const Dashboard: React.FC = () => {
               <CheckCircle2 size={48} className="text-white" />
             </div>
 
-            <h2 className="text-[#002D5B] text-2xl font-black uppercase tracking-widest mb-2">Entrega Realizada!</h2>
+            <h2 className="text-[#0041B6] text-2xl font-black uppercase tracking-widest mb-2">Entrega Realizada!</h2>
             <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.3em] mb-6">Confirmação v4.0</p>
 
             <div className="bg-[#2A9D8F]/5 p-6 rounded-[2rem] mb-8 border-2 border-dashed border-[#2A9D8F]/20">
               <p className="text-[#2A9D8F] font-black uppercase text-sm mb-1 italic">Voucher Validado</p>
-              <p className="text-[#002D5B] font-bold text-lg">{lastConfirmedName}</p>
+              <p className="text-[#0041B6] font-bold text-lg">{lastConfirmedName}</p>
             </div>
 
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="w-full bg-[#002D5B] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+              className="w-full bg-[#0041B6] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
             >
               Sensacional! 🎊
             </button>
