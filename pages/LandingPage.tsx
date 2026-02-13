@@ -149,7 +149,7 @@ const LandingPage: React.FC = () => {
 
                   <div className="text-center md:text-left">
                     <h3 className="text-[#0041B6] font-black text-3xl md:text-4xl uppercase mb-6 leading-tight">
-                      Entrada Solidária <br className="hidden md:block" />& Pulseira VIP
+                      Entrada Solidária <br className="hidden md:block" />& Pulseira
                     </h3>
 
                     <div className="space-y-4">
@@ -167,11 +167,11 @@ const LandingPage: React.FC = () => {
                         </li>
                         <li className="flex items-center gap-3">
                           <span className="w-6 h-6 bg-[#0041B6] text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0">3</span>
-                          <span>Receba sua <strong>pulseira exclusiva</strong> para acesso ao evento.</span>
+                          <span>Receba sua <strong>pulseira de acesso</strong> para o evento.</span>
                         </li>
                       </ul>
                       <p className="pt-4 text-[#0041B6] font-black uppercase text-sm tracking-wider border-t border-blue-50">
-                        A pulseira garante seu acesso completo e total conforto!
+                        A pulseira garante seu acesso completo ao Bloco dos Maurinhos!
                       </p>
                     </div>
                   </div>
