@@ -135,42 +135,48 @@ const LandingPage: React.FC = () => {
               </h2>
             </div>
 
-            <div className={`grid grid-cols-1 ${settings?.show_vip_card !== false && settings?.show_solidarity_card !== false ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-10`}>
-              {settings?.show_vip_card !== false && (
-                <div className="bg-gradient-to-br from-blue-50 to-white p-10 rounded-[3rem] border-2 border-[#0041B6]/5 hover:border-[#FFD100]/50 transition-all group overflow-hidden relative">
-                  <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <Gift size={200} />
-                  </div>
-                  <div className="bg-[#FFD100] p-6 rounded-[2rem] shadow-lg w-fit mb-8 group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                    <Gift className="text-[#0041B6] w-10 h-10" />
-                  </div>
-                  <h3 className="text-[#0041B6] font-black text-2xl uppercase mb-3">
-                    {settings?.vip_box_title || 'Pulseira VIP Exclusive'}
-                  </h3>
-                  <p className="text-gray-600 font-medium leading-relaxed text-lg italic">
-                    {settings?.vip_box_description || 'Acesso garantido e conforto para quem vive a experiência completa da UNINASSAU.'}
-                  </p>
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-gradient-to-br from-[#0041B6]/5 to-white p-10 md:p-14 rounded-[3.5rem] border-2 border-[#0041B6]/10 hover:border-[#FFD100]/50 transition-all group overflow-hidden relative shadow-xl">
+                {/* Decorative Icons */}
+                <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Gift size={250} />
                 </div>
-              )}
 
-              {settings?.show_solidarity_card !== false && (
-                <div id="solidariedade" className="bg-gradient-to-br from-red-50 to-white p-10 rounded-[3rem] border-2 border-[#E63946]/5 hover:border-[#E63946]/30 transition-all group overflow-hidden relative">
-                  <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity text-red-600">
-                    <Heart size={200} />
+                <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+                  <div className="bg-[#FFD100] p-8 rounded-[2.5rem] shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform flex-shrink-0">
+                    <Heart className="text-[#0041B6] w-12 h-12" />
                   </div>
-                  <div className="bg-[#E63946] p-6 rounded-[2rem] shadow-lg w-fit mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform">
-                    <Heart className="text-white w-10 h-10" />
+
+                  <div className="text-center md:text-left">
+                    <h3 className="text-[#0041B6] font-black text-3xl md:text-4xl uppercase mb-6 leading-tight">
+                      Entrada Solidária <br className="hidden md:block" />& Pulseira VIP
+                    </h3>
+
+                    <div className="space-y-4">
+                      <p className="text-gray-700 font-bold text-lg leading-relaxed italic">
+                        Para garantir sua vaga na folia, o processo é simples e solidário:
+                      </p>
+                      <ul className="text-gray-600 font-medium text-base space-y-3">
+                        <li className="flex items-center gap-3">
+                          <span className="w-6 h-6 bg-[#0041B6] text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0">1</span>
+                          <span>Faça sua <strong>inscrição online</strong> agora mesmo.</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                          <span className="w-6 h-6 bg-[#0041B6] text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0">2</span>
+                          <span>Leve <strong>1kg de alimento não perecível</strong> no dia do evento.</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                          <span className="w-6 h-6 bg-[#0041B6] text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0">3</span>
+                          <span>Retire sua <strong>pulseira exclusiva</strong> no acesso.</span>
+                        </li>
+                      </ul>
+                      <p className="pt-4 text-[#0041B6] font-black uppercase text-sm tracking-wider border-t border-blue-50">
+                        A pulseira garante seu acesso completo e total conforto!
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-[#0041B6] font-black text-2xl uppercase mb-3">Ingresso Solidário</h3>
-                  <p className="text-gray-600 font-medium leading-relaxed text-lg italic">
-                    {settings?.solidarity_description || (
-                      <>
-                        Sua entrada é confirmada mediante a doação de <strong className="text-[#E63946]">1kg de alimento</strong>. Vamos juntos fazer a diferença na folia!
-                      </>
-                    )}
-                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </section>
