@@ -109,7 +109,16 @@ const Dashboard: React.FC = () => {
         .eq('id', 'current_event')
         .single();
       if (fetchError) throw fetchError;
-      setEventSettings(data);
+
+      // Garante que novos campos tenham valores padrão se forem null no banco
+      const normalizedData = {
+        ...data,
+        show_vip_card: data.show_vip_card ?? true,
+        show_solidarity_card: data.show_solidarity_card ?? true,
+        hero_cta_text: data.hero_cta_text ?? 'Garantir Inscrição',
+      };
+
+      setEventSettings(normalizedData);
     } catch (err) {
       console.error('Erro ao buscar configurações:', err);
     }
@@ -375,19 +384,26 @@ const Dashboard: React.FC = () => {
       const { error: updError } = await supabase
         .from('event_settings')
         .update({
-          edition: eventSettings.edition,
-          year_label: eventSettings.year_label,
-          hero_image_url: eventSettings.hero_image_url,
-          event_date: eventSettings.event_date,
-          subtitle: eventSettings.subtitle,
           about_text: eventSettings.about_text,
           primary_color: eventSettings.primary_color,
           secondary_color: eventSettings.secondary_color,
           accent_color: eventSettings.accent_color,
-          title_main_color: eventSettings.title_main_color,
-          title_highlight_color: eventSettings.title_highlight_color,
-          title_main: eventSettings.title_main,
-          title_highlight: eventSettings.title_highlight,
+          solidarity_title: eventSettings.solidarity_title,
+          solidarity_description: eventSettings.solidarity_description,
+          vip_box_title: eventSettings.vip_box_title,
+          vip_box_description: eventSettings.vip_box_description,
+          schedule_title: eventSettings.schedule_title,
+          footer_address: eventSettings.footer_address,
+          footer_instagram: eventSettings.footer_instagram,
+          footer_phone: eventSettings.footer_phone,
+          footer_copyright: eventSettings.footer_copyright,
+          show_hero: eventSettings.show_hero,
+          show_solidarity: eventSettings.show_solidarity,
+          show_vip_card: eventSettings.show_vip_card,
+          show_solidarity_card: eventSettings.show_solidarity_card,
+          show_schedule: eventSettings.show_schedule,
+          show_footer: eventSettings.show_footer,
+          hero_cta_text: eventSettings.hero_cta_text,
           updated_at: new Date().toISOString()
         })
         .eq('id', 'current_event');
@@ -971,185 +987,181 @@ const Dashboard: React.FC = () => {
         }
         {
           activeTab === 'settings' && eventSettings && (
-            <div className="animate-fade-in space-y-8 max-w-4xl mx-auto">
+            <div className="animate-fade-in space-y-8 max-w-4xl mx-auto pb-20">
               <div className="glass-card p-10 rounded-[3rem] shadow-2xl border-4 border-[#002D5B]/10">
                 <h3 className="text-xl font-black text-[#002D5B] uppercase tracking-widest mb-10 flex items-center gap-4">
                   <div className="bg-[#002D5B] p-3 rounded-2xl text-white"><Settings size={28} /></div>
                   Identidade do Evento
                 </h3>
 
-                <form onSubmit={handleUpdateSettings} className="space-y-10">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Edição do Evento</label>
-                      <input
-                        type="text"
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                        value={eventSettings.edition}
-                        onChange={e => setEventSettings({ ...eventSettings, edition: e.target.value })}
-                        placeholder="Ex: 4ª Edição"
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Selo de Ano (Header)</label>
-                      <input
-                        type="text"
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                        value={eventSettings.year_label}
-                        onChange={e => setEventSettings({ ...eventSettings, year_label: e.target.value })}
-                        placeholder="Ex: Ano IV"
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Data Oficial</label>
-                      <input
-                        type="text"
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                        value={eventSettings.event_date}
-                        onChange={e => setEventSettings({ ...eventSettings, event_date: e.target.value })}
-                        placeholder="Ex: 27 de Fevereiro"
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Subtítulo (Abaixo do Título)</label>
-                      <input
-                        type="text"
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                        value={eventSettings.subtitle || ''}
-                        onChange={e => setEventSettings({ ...eventSettings, subtitle: e.target.value })}
-                        placeholder="Frase curta de impacto..."
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Título (Linha 1)</label>
-                      <input
-                        type="text"
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                        value={eventSettings.title_main || ''}
-                        onChange={e => setEventSettings({ ...eventSettings, title_main: e.target.value })}
-                        placeholder="Ex: Bloco dos"
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Título (Destaque)</label>
-                      <input
-                        type="text"
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
-                        value={eventSettings.title_highlight || ''}
-                        onChange={e => setEventSettings({ ...eventSettings, title_highlight: e.target.value })}
-                        placeholder="Ex: Mauricinhos"
-                      />
-                    </div>
-                    <div className="space-y-4 md:col-span-2">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto "Sobre o Evento" (Footer)</label>
-                      <textarea
-                        rows={3}
-                        className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
-                        value={eventSettings.about_text || ''}
-                        onChange={e => setEventSettings({ ...eventSettings, about_text: e.target.value })}
-                        placeholder="Descrição detalhada para o rodapé..."
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Imagem Hero (Banner)</label>
-                      <div className="flex flex-col gap-4">
-                        <div className="flex gap-4 items-center">
-                          <div className="flex-1 relative group cursor-pointer">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleImageUpload}
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                              disabled={imageUploading}
-                            />
-                            <div className={`w-full bg-[#002D5B]/5 border-2 border-dashed rounded-2xl px-6 py-6 transition-all flex items-center justify-center gap-3 ${imageUploading ? 'border-[#002D5B]/20 animate-pulse' : 'border-[#002D5B]/20 group-hover:border-[#002D5B] group-hover:bg-[#002D5B]/5'}`}>
-                              {imageUploading ? (
-                                <>
-                                  <Loader2 className="animate-spin text-[#002D5B]" size={20} />
-                                  <span className="text-[10px] font-black uppercase text-[#002D5B]">Enviando...</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Upload className="text-[#002D5B]" size={20} />
-                                  <span className="text-[10px] font-black uppercase text-[#002D5B]">Escolher Nova Foto Hero</span>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          <div className="w-24 h-24 rounded-2xl bg-gray-100 overflow-hidden border-4 border-white shadow-xl flex-shrink-0">
-                            <img
-                              src={eventSettings.hero_image_url}
-                              className="w-full h-full object-cover"
-                              alt="Preview"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = '/hero-carnaval.jpg';
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest px-2">* Recomendado: 1920x1080px</p>
-                      </div>
-                    </div>
-                  </div>
-
+                <form onSubmit={handleUpdateSettings} className="space-y-12">
+                  {/* Design & Mídia - Cores apenas */}
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">
-                      <Palette size={14} /> Cores da Marca
-                    </h4>
+                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">Identidade Visual (Cores)</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Primária (Azul)</label>
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Primária</label>
                         <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
                           <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.primary_color} onChange={e => setEventSettings({ ...eventSettings, primary_color: e.target.value })} />
                           <span className="font-mono text-xs font-bold uppercase">{eventSettings.primary_color}</span>
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Secundária (Amarelo)</label>
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor Secundária</label>
                         <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
                           <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.secondary_color} onChange={e => setEventSettings({ ...eventSettings, secondary_color: e.target.value })} />
                           <span className="font-mono text-xs font-bold uppercase">{eventSettings.secondary_color}</span>
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor de Destaque (Vermelho)</label>
+                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Cor de Destaque</label>
                         <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
                           <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.accent_color} onChange={e => setEventSettings({ ...eventSettings, accent_color: e.target.value })} />
                           <span className="font-mono text-xs font-bold uppercase">{eventSettings.accent_color}</span>
                         </div>
                       </div>
+                      <div className="space-y-4 md:col-span-3 pt-6 border-t border-[#002D5B]/5">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Texto do Botão Hero</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.hero_cta_text || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, hero_cta_text: e.target.value })}
+                          placeholder="Ex: Garantir Inscrição"
+                        />
+                      </div>
                     </div>
                   </div>
 
+                  {/* Solidariedade & Programação */}
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2 flex items-center gap-2">
-                      <Palette size={14} /> Cores do Título Hero
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Parte de Cima (Ex: Bloco dos)</label>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.title_main_color || '#FFFFFF'} onChange={e => setEventSettings({ ...eventSettings, title_main_color: e.target.value })} />
-                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.title_main_color || '#FFFFFF'}</span>
-                        </div>
+                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2">Conteúdo das Seções</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Título Solidariedade</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.solidarity_title || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, solidarity_title: e.target.value })}
+                        />
                       </div>
-                      <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase text-[#002D5B]/60 ml-1">Parte de Baixo (Ex: Mauricinhos)</label>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border-2 border-[#002D5B]/5 shadow-sm">
-                          <input type="color" className="w-10 h-10 rounded-lg cursor-pointer border-none" value={eventSettings.title_highlight_color || '#FFD100'} onChange={e => setEventSettings({ ...eventSettings, title_highlight_color: e.target.value })} />
-                          <span className="font-mono text-xs font-bold uppercase">{eventSettings.title_highlight_color || '#FFD100'}</span>
-                        </div>
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Descrição Solidariedade</label>
+                        <textarea
+                          rows={2}
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
+                          value={eventSettings.solidarity_description || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, solidarity_description: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Título VIP Box</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.vip_box_title || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, vip_box_title: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Descrição VIP Box</label>
+                        <textarea
+                          rows={2}
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold resize-none"
+                          value={eventSettings.vip_box_description || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, vip_box_description: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-4 md:col-span-2">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Título Programação</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.schedule_title || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, schedule_title: e.target.value })}
+                        />
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t border-[#002D5B]/5">
+                  {/* Rodapé & Contato */}
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2">Rodapé & Contato</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Endereço</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.footer_address || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, footer_address: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Instagram (@...)</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.footer_instagram || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, footer_instagram: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Telefone</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.footer_phone || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, footer_phone: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase text-[#002D5B]/50 ml-1 tracking-widest">Copyright</label>
+                        <input
+                          type="text"
+                          className="w-full bg-[#002D5B]/5 border-2 border-transparent rounded-2xl px-6 py-4 focus:border-[#002D5B] focus:bg-white focus:outline-none transition-all font-bold"
+                          value={eventSettings.footer_copyright || ''}
+                          onChange={e => setEventSettings({ ...eventSettings, footer_copyright: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visibilidade */}
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-black uppercase text-[#002D5B]/30 border-b border-[#002D5B]/5 pb-2">Visibilidade</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {[
+                        { id: 'show_hero', label: 'Início' },
+                        { id: 'show_solidarity', label: 'Seção Solidariedade' },
+                        { id: 'show_vip_card', label: 'Card VIP' },
+                        { id: 'show_solidarity_card', label: 'Card Solidário' },
+                        { id: 'show_schedule', label: 'Programação' },
+                        { id: 'show_footer', label: 'Rodapé' },
+                      ].map(toggle => (
+                        <div key={toggle.id} className="flex flex-col gap-2 p-4 bg-[#002D5B]/5 rounded-2xl">
+                          <span className="text-[9px] font-black uppercase text-[#002D5B]/40">{toggle.label}</span>
+                          <button
+                            type="button"
+                            onClick={() => setEventSettings({ ...eventSettings, [toggle.id]: !eventSettings[toggle.id as keyof EventSettings] })}
+                            className={`w-12 h-6 rounded-full transition-all relative ${eventSettings[toggle.id as keyof EventSettings] !== false ? 'bg-[#2A9D8F]' : 'bg-gray-300'}`}
+                          >
+                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${eventSettings[toggle.id as keyof EventSettings] !== false ? 'left-7' : 'left-1'}`}></div>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-10 border-t border-[#002D5B]/5">
                     <button
                       disabled={settingsLoading}
-                      className="w-full md:w-auto bg-[#002D5B] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3"
+                      type="submit"
+                      className="w-full md:w-auto bg-[#002D5B] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
                       {settingsLoading ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle2 size={18} />}
-                      Salvar Identidade do Evento
+                      Salvar Tudo ✨
                     </button>
                   </div>
                 </form>

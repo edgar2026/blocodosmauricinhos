@@ -149,9 +149,9 @@ const RegistrationForm: React.FC = () => {
           </Link>
 
           <div className="mb-10 text-center">
-            <span className="bg-[var(--secondary-color)]/20 text-[var(--primary-color)] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em]">{settings?.edition} • Garanta sua Vaga</span>
+            <span className="bg-[var(--secondary-color)]/20 text-[var(--primary-color)] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em]">4° Edição - Bloco dos Maurinhos</span>
             <h2 className="text-[var(--primary-color)] text-3xl font-black mt-4 uppercase">Garanta sua Entrada</h2>
-            <p className="text-gray-500 font-medium italic mt-1">Vagas limitadas para o {settings?.year_label}!</p>
+            <p className="text-gray-500 font-medium italic mt-1">pulseiras limitadas!</p>
           </div>
 
           {submitted ? (
@@ -303,7 +303,7 @@ const RegistrationForm: React.FC = () => {
                         Processando...
                       </>
                     ) : (
-                      'Finalizar Inscrição ✨'
+                      'Finalizar'
                     )}
                   </button>
                 </div>

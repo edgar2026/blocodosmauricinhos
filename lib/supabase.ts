@@ -52,5 +52,21 @@ export interface EventSettings {
     title_highlight_color?: string;
     title_main?: string;
     title_highlight?: string;
+    solidarity_title?: string;
+    solidarity_description?: string;
+    vip_box_title?: string;
+    vip_box_description?: string;
+    schedule_title?: string;
+    footer_address?: string;
+    footer_instagram?: string;
+    footer_phone?: string;
+    footer_copyright?: string;
+    show_hero?: boolean;
+    show_solidarity?: boolean;
+    show_vip_card?: boolean;
+    show_solidarity_card?: boolean;
+    show_schedule?: boolean;
+    show_footer?: boolean;
+    hero_cta_text?: string;
     updated_at?: string;
 }
