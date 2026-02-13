@@ -331,8 +331,8 @@ const Dashboard: React.FC = () => {
 
   const handleAddAttraction = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newAttraction.name || !newAttraction.time) {
-      alert('Por favor, preencha o nome e o horário da atração! 🎸');
+    if (!newAttraction.name) {
+      alert('Por favor, preencha o nome da atração! 🎸');
       return;
     }
 

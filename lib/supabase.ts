@@ -30,7 +30,7 @@ export interface Participant {
 export interface Attraction {
     id?: string;
     name: string;
-    time: string;
+    time?: string;
     type: string;
     is_featured?: boolean;
     order?: number;

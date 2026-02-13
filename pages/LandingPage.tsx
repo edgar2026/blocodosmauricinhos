@@ -207,10 +207,14 @@ const LandingPage: React.FC = () => {
                     : 'bg-white text-[#0041B6] shadow-md hover:shadow-xl hover:-translate-y-1 border-transparent hover:border-[#FFD100]'
                     }`}>
                     <div className="flex items-center gap-6 mb-4 md:mb-0">
-                      <div className={`p-4 rounded-2xl ${item.is_featured ? 'bg-white/10' : 'bg-[#FFD100]/10 text-[#FFD100]'}`}>
-                        {item.type === 'dj' ? <Clock size={20} /> : <Music size={20} />}
-                      </div>
-                      <span className="text-2xl font-black tracking-tighter">{item.time}</span>
+                      {item.time && (
+                        <>
+                          <div className={`p-4 rounded-2xl ${item.is_featured ? 'bg-white/10' : 'bg-[#FFD100]/10 text-[#FFD100]'}`}>
+                            {item.type === 'dj' ? <Clock size={20} /> : <Music size={20} />}
+                          </div>
+                          <span className="text-2xl font-black tracking-tighter">{item.time}</span>
+                        </>
+                      )}
                     </div>
                     <div className="text-right flex items-center gap-4">
                       <span className={`text-xl md:text-2xl font-black uppercase tracking-tight ${item.is_featured ? 'text-[#FFD100]' : ''}`}>
