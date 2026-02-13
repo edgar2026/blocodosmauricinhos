@@ -163,11 +163,11 @@ const LandingPage: React.FC = () => {
                         </li>
                         <li className="flex items-center gap-3">
                           <span className="w-6 h-6 bg-[#0041B6] text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0">2</span>
-                          <span>Leve <strong>1kg de alimento não perecível</strong> no dia do evento.</span>
+                          <span>Leve <strong>1kg de alimento não perecível</strong> a um dos pontos de retirada.</span>
                         </li>
                         <li className="flex items-center gap-3">
                           <span className="w-6 h-6 bg-[#0041B6] text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0">3</span>
-                          <span>Retire sua <strong>pulseira exclusiva</strong> no acesso.</span>
+                          <span>Receba sua <strong>pulseira exclusiva</strong> para acesso ao evento.</span>
                         </li>
                       </ul>
                       <p className="pt-4 text-[#0041B6] font-black uppercase text-sm tracking-wider border-t border-blue-50">
