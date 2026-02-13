@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from '../components/Logo';
-import { User, Facebook, Twitter, Instagram, Youtube, Clock, Music, Calendar, MapPin, Heart, Gift, Star } from 'lucide-react';
+import {
+  User,
+  Music,
+  MapPin,
+  Calendar,
+  ArrowRight,
+  Clock,
+  Gift,
+  Heart,
+  Star,
+  Instagram,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronUp
+} from 'lucide-react';
 import { supabase, Attraction, EventSettings } from '../lib/supabase';
 
 const LandingPage: React.FC = () => {
@@ -206,46 +221,63 @@ const LandingPage: React.FC = () => {
                   return (
                     <div
                       key={idx}
-                      className={`group relative flex flex-col md:flex-row md:items-center ${hasTime ? 'justify-between' : 'justify-center'} p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 border-2 ${item.is_featured
-                        ? 'bg-gradient-to-br from-[#0041B6] to-[#002B7A] text-white shadow-[0_20px_50px_rgba(0,65,182,0.3)] scale-[1.02] border-[#FFD100]/40'
-                        : 'bg-white/70 backdrop-blur-md text-[#0041B6] shadow-sm hover:shadow-xl hover:-translate-y-1.5 border-white/50 hover:border-[#0041B6]/20'
+                      className={`group relative flex flex-col md:flex-row md:items-center p-8 md:p-12 mb-8 last:mb-0 rounded-[3rem] transition-all duration-700 ${item.is_featured
+                        ? 'bg-gradient-to-br from-[#0041B6] to-[#002B7A] text-white shadow-[0_30px_60px_-15px_rgba(0,65,182,0.4)] scale-[1.03] border-2 border-[#FFD100]/30'
+                        : 'bg-white shadow-[0_15px_30px_-5px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_60px_-15px_rgba(0,65,182,0.1)] hover:-translate-y-2 border-2 border-transparent hover:border-[#0041B6]/10'
                         }`}
                     >
-                      {/* Featured Glow Effect */}
-                      {item.is_featured && (
-                        <div className="absolute inset-0 bg-gradient-to-tr from-[#FFD100]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem] pointer-events-none"></div>
+                      {/* Timeline Connector - Only on Desktop and if there's a next item */}
+                      {idx < attractions.length - 1 && (
+                        <div className="hidden md:block absolute left-12 bottom-[-32px] w-0.5 h-8 bg-gradient-to-b from-[#0041B6]/20 to-transparent"></div>
                       )}
 
-                      <div className={`flex items-center gap-6 ${!hasTime ? 'md:absolute md:left-10' : ''}`}>
-                        {hasTime ? (
-                          <>
-                            <div className={`p-4 rounded-2xl ${item.is_featured ? 'bg-white/10 shadow-inner' : 'bg-[#FFD100]/10 text-[#FFD100]'}`}>
-                              {item.type === 'dj' ? <Clock size={20} className="animate-pulse" /> : <Music size={20} />}
-                            </div>
-                            <span className="text-2xl md:text-3xl font-black tracking-tighter tabular-nums">{item.time}</span>
-                          </>
-                        ) : (
-                          <div className={`hidden md:block p-3 rounded-xl ${item.is_featured ? 'bg-white/10' : 'bg-[#0041B6]/5 opacity-30 text-[#0041B6]'}`}>
-                            {item.type === 'dj' ? <Clock size={18} /> : <Music size={18} />}
-                          </div>
+                      {/* Header/Time Section */}
+                      <div className="flex items-center gap-6 mb-6 md:mb-0 md:w-48 shrink-0">
+                        <div className={`w-16 h-16 flex items-center justify-center rounded-[1.5rem] shadow-inner transition-transform group-hover:rotate-6 ${item.is_featured ? 'bg-white/10' : 'bg-[#0041B6]/5 text-[#0041B6]'
+                          }`}>
+                          {item.type === 'dj' ? <Clock size={28} /> : <Music size={28} />}
+                        </div>
+                        {hasTime && (
+                          <span className="text-3xl font-black tracking-tighter tabular-nums leading-none">
+                            {item.time}
+                          </span>
                         )}
                       </div>
 
-                      <div className={`flex items-center gap-4 ${!hasTime ? 'text-center' : 'text-right'}`}>
-                        <span className={`text-2xl md:text-3xl font-black uppercase tracking-tight leading-none ${item.is_featured ? 'text-[#FFD100] drop-shadow-sm' : ''}`}>
+                      {/* Info Section */}
+                      <div className="flex-1 space-y-2">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${item.is_featured
+                            ? 'bg-[#FFD100] text-[#0041B6] border-[#FFD100]'
+                            : 'bg-[#0041B6]/5 text-[#0041B6] border-[#0041B6]/10'
+                            }`}>
+                            {item.type === 'banda' ? 'Banda / Show' : item.type === 'dj' ? 'DJ Set' : 'Atração'}
+                          </span>
+                          {item.is_featured && (
+                            <span className="bg-white/10 text-[#FFD100] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                              <Star size={10} fill="currentColor" /> Destaque
+                            </span>
+                          )}
+                        </div>
+                        <h3 className={`text-3xl md:text-4xl font-black uppercase tracking-tight leading-none ${item.is_featured ? 'text-white' : 'text-[#0041B6]'
+                          }`}>
                           {item.name}
-                        </span>
-                        {item.is_featured && (
-                          <div className="relative">
-                            <Star size={28} className="text-[#FFD100] fill-[#FFD100] animate-bounce" />
-                            <div className="absolute inset-0 blur-md bg-[#FFD100] opacity-30 animate-pulse"></div>
-                          </div>
-                        )}
+                        </h3>
                       </div>
 
-                      {/* Line decorative for non-featured when has time */}
-                      {hasTime && !item.is_featured && (
-                        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-px h-8 bg-[#0041B6]/5"></div>
+                      {/* Call to action decorative */}
+                      <div className="hidden md:flex flex-col items-end gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 ${item.is_featured ? 'border-[#FFD100]/50 text-[#FFD100]' : 'border-[#0041B6]/20 text-[#0041B6]'
+                          }`}>
+                          <ArrowRight size={20} />
+                        </div>
+                      </div>
+
+                      {/* Background Detail for Featured */}
+                      {item.is_featured && (
+                        <div className="absolute top-0 right-0 p-8 opacity-10">
+                          <Music size={120} />
+                        </div>
                       )}
                     </div>
                   );
