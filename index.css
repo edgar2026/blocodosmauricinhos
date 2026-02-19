@@ -1,0 +1,45 @@
+@layer base {
+  :root {
+    --primary-color: #0041B6;
+    --secondary-color: #FFD100;
+    --accent-color: #E63946;
+    --text-navy: #0041B6;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Fredoka', sans-serif !important;
+    color: var(--primary-color);
+    background-color: #f9fafb;
+  }
+}
+
+.font-sans,
+.font-serif,
+.font-mono {
+  font-family: 'Fredoka', sans-serif !important;
+}
+
+/* Custom scrollbar for better aesthetics */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0041B6;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFD100;
+}
