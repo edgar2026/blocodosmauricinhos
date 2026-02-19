@@ -128,7 +128,7 @@ const LandingPage: React.FC = () => {
               <div className="bg-[#0041B6] text-white px-8 py-3 rounded-full font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-xl flex items-center gap-4 md:gap-6 flex-wrap justify-center">
                 <div className="flex items-center gap-2">
                   <Calendar size={18} className="text-[#FFD100]" />
-                  <span>26 de Fevereiro</span>
+                  <span>27 de Fevereiro</span>
                 </div>
                 <div className="h-4 w-px bg-white/30 hidden sm:block"></div>
                 <div className="flex items-center gap-2">
