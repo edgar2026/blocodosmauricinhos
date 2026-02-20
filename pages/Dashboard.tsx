@@ -551,11 +551,16 @@ const Dashboard: React.FC = () => {
     'Paulista': 0
   } as Record<string, number>) : {};
 
-  const barData = Object.entries(unitCounts).map(([name, value], index) => ({
-    name,
-    value,
-    color: ['#0041B6', '#1D71BC', '#FFD100', '#2A9D8F', '#E63946'][index % 5]
-  }));
+  const barData = Object.entries(unitCounts)
+    .map(([name, value]) => ({
+      name: name as string,
+      value: value as number,
+    }))
+    .sort((a, b) => b.value - a.value)
+    .map((item, index) => ({
+      ...item,
+      color: ['#0041B6', '#1D71BC', '#FFD100', '#2A9D8F', '#E63946'][index % 5]
+    }));
 
   const foodTypeCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
     if (p?.bracelet_delivered && p?.food_type) {
