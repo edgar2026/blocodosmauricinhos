@@ -554,7 +554,7 @@ const Dashboard: React.FC = () => {
   const barData = Object.entries(unitCounts)
     .map(([name, value]) => ({
       name: name as string,
-      value: value as number,
+      value: Number(value),
     }))
     .sort((a, b) => b.value - a.value)
     .map((item, index) => ({
@@ -835,7 +835,7 @@ const Dashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
-                <h4 className="text-[#0041B6] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade</h4>
+                <h4 className="text-[#0041B6] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade (Ranking)</h4>
                 <div className="h-[300px] w-full">
                   {barData && barData.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
