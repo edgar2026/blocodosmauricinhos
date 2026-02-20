@@ -849,11 +849,11 @@ const Dashboard: React.FC = () => {
                       <div className="mt-6 flex justify-center gap-8">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-[#2A9D8F] shadow-[0_0_10px_rgba(42,157,143,0.4)]"></div>
-                          <p className="text-[10px] font-black uppercase text-[#0041B6]/60">Com Doação: <span className="text-[#2A9D8F] text-xs">{(totalDoadores / (totalEntregues || 1) * 100).toFixed(0)}%</span></p>
+                          <p className="text-[10px] font-black uppercase text-[#0041B6]/60">Com Doação: <span className="text-[#2A9D8F] text-xs font-black">{totalDoadores}</span> <span className="opacity-40 ml-1">({(totalDoadores / (totalEntregues || 1) * 100).toFixed(0)}%)</span></p>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-[#FFD100] shadow-[0_0_10px_rgba(255,209,0,0.4)]"></div>
-                          <p className="text-[10px] font-black uppercase text-[#0041B6]/60">Sem Doação: <span className="text-[#FFA500] text-xs">{(totalSemDoacao / (totalEntregues || 1) * 100).toFixed(0)}%</span></p>
+                          <p className="text-[10px] font-black uppercase text-[#0041B6]/60">Sem Doação: <span className="text-[#FFA500] text-xs font-black">{totalSemDoacao}</span> <span className="opacity-40 ml-1">({(totalSemDoacao / (totalEntregues || 1) * 100).toFixed(0)}%)</span></p>
                         </div>
                       </div>
                     </>
@@ -975,7 +975,10 @@ const Dashboard: React.FC = () => {
                         {userTypePieData.map((item, index) => (
                           <div key={item.name} className="flex items-center gap-2">
                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ['#0041B6', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5] }}></div>
-                            <p className="text-[9px] font-black uppercase text-[#0041B6]/60">{item.name}: <span className="text-[#0041B6] text-xs">{((item.value / (totalInscritos || 1)) * 100).toFixed(0)}%</span></p>
+                            <p className="text-[9px] font-black uppercase text-[#0041B6]/60">
+                              {item.name}: <span className="text-[#0041B6] text-xs font-black">{item.value}</span>
+                              <span className="opacity-40 ml-1">({((item.value / (totalInscritos || 1)) * 100).toFixed(0)}%)</span>
+                            </p>
                           </div>
                         ))}
                       </div>
