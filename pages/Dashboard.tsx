@@ -542,7 +542,14 @@ const Dashboard: React.FC = () => {
     const unit = p?.unit || 'Não Informada';
     acc[unit] = (acc[unit] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>) : {};
+  }, {
+    'Boa Viagem': 0,
+    'Caxangá': 0,
+    'Centro Administrativo': 0,
+    'Graças': 0,
+    'Olinda': 0,
+    'Paulista': 0
+  } as Record<string, number>) : {};
 
   const barData = Object.entries(unitCounts).map(([name, value], index) => ({
     name,
@@ -951,11 +958,12 @@ const Dashboard: React.FC = () => {
                       onChange={(e) => setFilterUnit(e.target.value)}
                     >
                       <option value="all">Todas as Unidades</option>
-                      <option value="Graças">Graças</option>
                       <option value="Boa Viagem">Boa Viagem</option>
-                      <option value="Paulista">Paulista</option>
-                      <option value="Olinda">Olinda</option>
                       <option value="Caxangá">Caxangá</option>
+                      <option value="Centro Administrativo">Centro Administrativo</option>
+                      <option value="Graças">Graças</option>
+                      <option value="Olinda">Olinda</option>
+                      <option value="Paulista">Paulista</option>
                     </select>
                     <ChevronDown size={16} className="absolute right-6 top-1/2 -translate-y-1/2 text-[#0041B6]/30 pointer-events-none" />
                   </div>

@@ -257,11 +257,12 @@ const RegistrationForm: React.FC = () => {
                       required
                     >
                       <option value="" disabled>Escolha sua unidade</option>
-                      <option value="Graças">Graças</option>
                       <option value="Boa Viagem">Boa Viagem</option>
-                      <option value="Paulista">Paulista</option>
-                      <option value="Olinda">Olinda</option>
                       <option value="Caxangá">Caxangá</option>
+                      <option value="Centro Administrativo">Centro Administrativo</option>
+                      <option value="Graças">Graças</option>
+                      <option value="Olinda">Olinda</option>
+                      <option value="Paulista">Paulista</option>
                     </select>
                     <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#FFD100]">
                       <ChevronDown size={24} />
