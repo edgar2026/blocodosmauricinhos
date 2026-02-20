@@ -792,7 +792,14 @@ const Dashboard: React.FC = () => {
                 <div className="flex-1 min-h-[300px] relative">
                   {totalEntregues > 0 ? (
                     <>
-                      <div className="h-[320px] w-full">
+                      <div className="h-[320px] w-full relative flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
+                          <div className="animate-pulse-slow flex flex-col items-center">
+                            <p className="text-[10px] font-black uppercase opacity-40 tracking-widest mb-1">Entregues</p>
+                            <p className="text-4xl font-black text-[#0041B6] drop-shadow-sm leading-none">{totalEntregues}</p>
+                            <div className="mt-2 h-1.5 w-10 bg-[#2A9D8F] rounded-full shadow-[0_2px_4px_rgba(42,157,143,0.3)]"></div>
+                          </div>
+                        </div>
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
                             <defs>
@@ -810,8 +817,8 @@ const Dashboard: React.FC = () => {
                                 { name: 'Com Doação', value: totalDoadores, color: 'url(#colorDonors)' },
                                 { name: 'Sem Doação', value: totalSemDoacao, color: 'url(#colorNonDonors)' }
                               ]}
-                              innerRadius={80}
-                              outerRadius={110}
+                              innerRadius={85}
+                              outerRadius={115}
                               paddingAngle={10}
                               dataKey="value"
                               stroke="none"
@@ -835,13 +842,6 @@ const Dashboard: React.FC = () => {
                             />
                           </PieChart>
                         </ResponsiveContainer>
-                      </div>
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
-                        <div className="animate-pulse-slow">
-                          <p className="text-[10px] font-black uppercase opacity-40 tracking-widest">Entregues</p>
-                          <p className="text-4xl font-black text-[#0041B6] drop-shadow-sm">{totalEntregues}</p>
-                          <div className="mt-1 h-1 w-8 bg-[#2A9D8F] mx-auto rounded-full"></div>
-                        </div>
                       </div>
                       <div className="mt-6 flex justify-center gap-8">
                         <div className="flex items-center gap-2">
