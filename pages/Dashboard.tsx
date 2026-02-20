@@ -480,26 +480,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleDeleteParticipant = async (participantId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este folião permanentemente?')) return;
 
-    try {
-      const { error: delError } = await supabase
-        .from('participants')
-        .delete()
-        .eq('id', participantId);
-
-      if (delError) throw delError;
-
-      setIsDetailModalOpen(false);
-      setSelectedParticipant(null);
-      // fetchParticipants() will be triggered by realtime channel or we can call it here
-      await fetchParticipants();
-    } catch (err: any) {
-      console.error('Erro ao deletar folião:', err);
-      alert(`Erro ao excluir folião: ${err.message || 'Erro desconhecido'}`);
-    }
-  };
 
   const handleConfirmDelivery = async (participantId: string, kg: number, foodType: string) => {
     setUpdateLoading(participantId);
@@ -1444,18 +1425,12 @@ const Dashboard: React.FC = () => {
                 </div>
               )}
 
-              <div className="pt-6 flex gap-4">
+              <div className="pt-6">
                 <button
                   onClick={() => setIsDetailModalOpen(false)}
-                  className="flex-1 bg-[#0041B6] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-[1.02] transition-all"
+                  className="w-full bg-[#0041B6] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl hover:scale-[1.02] transition-all"
                 >
                   Fechar Detalhes
-                </button>
-                <button
-                  onClick={() => handleDeleteParticipant(selectedParticipant.id!)}
-                  className="flex-1 bg-red-50 text-[#E63946] border-2 border-[#E63946]/10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
-                >
-                  <Trash2 size={16} /> Excluir Registro
                 </button>
               </div>
             </div>
