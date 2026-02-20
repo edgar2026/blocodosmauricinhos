@@ -355,15 +355,28 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-white/10 pt-6 px-4 md:px-12">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-[10px] text-blue-200/40 uppercase tracking-[0.4em] font-bold text-center md:text-left">
-                {settings?.footer_copyright || '© 2026 UNINASSAU | Compromisso com a Educação e Cultura'}
-              </p>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#FFD100] animate-pulse"></div>
-                <span className="text-[9px] text-blue-200/30 uppercase tracking-widest font-semibold">
-                  {settings?.edition || 'Bloco dos Mauricinhos'} - {settings?.year_label || 'Ano IV'}
+          <div className="border-t border-white/10 pt-8 px-4 md:px-12">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
+                <p className="text-[10px] text-blue-200/30 uppercase tracking-[0.4em] font-bold text-center md:text-left">
+                  {settings?.footer_copyright || '© 2026 UNINASSAU | Compromisso com a Educação e Cultura'}
+                </p>
+                <div className="hidden md:block w-px h-3 bg-white/10"></div>
+                <p className="text-[9px] text-[#FFD100]/40 uppercase tracking-[0.5em] font-black hover:text-[#FFD100]/80 transition-colors cursor-default">
+                  Desenvolvido por Edgar Tavares.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4 bg-white/5 px-6 py-2 rounded-full border border-white/5">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#FFD100] animate-pulse"></div>
+                  <span className="text-[9px] text-blue-100/40 uppercase tracking-[0.2em] font-black">
+                    {settings?.edition || 'Bloco dos Mauricinhos'}
+                  </span>
+                </div>
+                <div className="w-px h-2 bg-white/10"></div>
+                <span className="text-[9px] text-[#FFD100] uppercase tracking-[0.3em] font-black">
+                  {settings?.year_label || 'Ano IV'}
                 </span>
               </div>
             </div>

@@ -318,6 +318,12 @@ const RegistrationForm: React.FC = () => {
           )}
         </div>
       </div>
+      <div className="pb-16 flex flex-col items-center gap-3 opacity-40 hover:opacity-100 transition-opacity">
+        <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#0041B6] to-transparent"></div>
+        <p className="text-[9px] text-[#0041B6] uppercase tracking-[0.5em] font-black">
+          Desenvolvido por Edgar Tavares.
+        </p>
+      </div>
     </div>
   );
 };
