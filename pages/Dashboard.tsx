@@ -792,34 +792,65 @@ const Dashboard: React.FC = () => {
                 <div className="flex-1 min-h-[300px] relative">
                   {totalEntregues > 0 ? (
                     <>
-                      <div className="h-[300px] w-full">
+                      <div className="h-[320px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
+                            <defs>
+                              <linearGradient id="colorDonors" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#2A9D8F" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#2A9D8F" stopOpacity={1} />
+                              </linearGradient>
+                              <linearGradient id="colorNonDonors" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#FFD100" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#FFD100" stopOpacity={1} />
+                              </linearGradient>
+                            </defs>
                             <Pie
                               data={[
-                                { name: 'Com Doação', value: totalDoadores, color: '#2A9D8F' },
-                                { name: 'Sem Doação', value: totalSemDoacao, color: '#FFD100' }
+                                { name: 'Com Doação', value: totalDoadores, color: 'url(#colorDonors)' },
+                                { name: 'Sem Doação', value: totalSemDoacao, color: 'url(#colorNonDonors)' }
                               ]}
-                              innerRadius={70}
-                              outerRadius={100}
-                              paddingAngle={8}
+                              innerRadius={80}
+                              outerRadius={110}
+                              paddingAngle={10}
                               dataKey="value"
-                              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                              stroke="none"
+                              animationBegin={0}
+                              animationDuration={1500}
+                              cornerRadius={10}
                             >
-                              <Cell key="cell-donors" fill="#2A9D8F" />
-                              <Cell key="cell-non-donors" fill="#FFD100" />
+                              <Cell key="cell-donors" fill="url(#colorDonors)" />
+                              <Cell key="cell-non-donors" fill="url(#colorNonDonors)" />
                             </Pie>
                             <Tooltip
-                              contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                              formatter={(value: any) => [value, "foliões"]}
+                              contentStyle={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                borderRadius: '1.5rem',
+                                border: 'none',
+                                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
+                                padding: '15px'
+                              }}
+                              itemStyle={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '10px' }}
+                              formatter={(value: any) => [`${value} foliões`, ""]}
                             />
                           </PieChart>
                         </ResponsiveContainer>
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
-                        <div>
-                          <p className="text-[10px] font-black uppercase opacity-40">Entregues</p>
-                          <p className="text-2xl font-black text-[#0041B6]">{totalEntregues}</p>
+                        <div className="animate-pulse-slow">
+                          <p className="text-[10px] font-black uppercase opacity-40 tracking-widest">Entregues</p>
+                          <p className="text-4xl font-black text-[#0041B6] drop-shadow-sm">{totalEntregues}</p>
+                          <div className="mt-1 h-1 w-8 bg-[#2A9D8F] mx-auto rounded-full"></div>
+                        </div>
+                      </div>
+                      <div className="mt-6 flex justify-center gap-8">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-[#2A9D8F] shadow-[0_0_10px_rgba(42,157,143,0.4)]"></div>
+                          <p className="text-[10px] font-black uppercase text-[#0041B6]/60">Com Doação: <span className="text-[#2A9D8F] text-xs">{(totalDoadores / (totalEntregues || 1) * 100).toFixed(0)}%</span></p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-[#FFD100] shadow-[0_0_10px_rgba(255,209,0,0.4)]"></div>
+                          <p className="text-[10px] font-black uppercase text-[#0041B6]/60">Sem Doação: <span className="text-[#FFA500] text-xs">{(totalSemDoacao / (totalEntregues || 1) * 100).toFixed(0)}%</span></p>
                         </div>
                       </div>
                     </>
