@@ -772,8 +772,11 @@ const Dashboard: React.FC = () => {
                           <LabelList
                             dataKey="value"
                             position="top"
-                            formatter={(v: number) => `${v}kg`}
-                            style={{ fill: '#0041B6', fontSize: 12, fontWeight: 900 }}
+                            formatter={(v: number) => {
+                              const pct = totalFoodKg > 0 ? ((v / totalFoodKg) * 100).toFixed(0) : 0;
+                              return `${v}kg (${pct}%)`;
+                            }}
+                            style={{ fill: '#0041B6', fontSize: 10, fontWeight: 900 }}
                           />
                         </Bar>
                       </BarChart>
@@ -885,7 +888,11 @@ const Dashboard: React.FC = () => {
                           <LabelList
                             dataKey="value"
                             position="right"
-                            style={{ fill: '#0041B6', fontSize: 12, fontWeight: 900 }}
+                            formatter={(v: number) => {
+                              const pct = totalInscritos > 0 ? ((v / totalInscritos) * 100).toFixed(0) : 0;
+                              return `${v} (${pct}%)`;
+                            }}
+                            style={{ fill: '#0041B6', fontSize: 10, fontWeight: 900 }}
                           />
                         </Bar>
                       </BarChart>
@@ -904,33 +911,73 @@ const Dashboard: React.FC = () => {
                 <div className="flex-1 min-h-[300px] relative">
                   {userTypePieData && userTypePieData.length > 0 ? (
                     <>
-                      <div className="h-[300px] w-full">
+                      <div className="h-[320px] w-full relative flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
+                          <div className="animate-pulse-slow flex flex-col items-center">
+                            <p className="text-[10px] font-black uppercase opacity-40 tracking-widest mb-1">Total</p>
+                            <p className="text-4xl font-black text-[#0041B6] drop-shadow-sm leading-none">{totalInscritos}</p>
+                            <div className="mt-2 h-1.5 w-10 bg-[#0041B6] rounded-full opacity-20"></div>
+                          </div>
+                        </div>
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
+                            <defs>
+                              <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#0041B6" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#0041B6" stopOpacity={1} />
+                              </linearGradient>
+                              <linearGradient id="colorYellow" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#FFD100" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#FFD100" stopOpacity={1} />
+                              </linearGradient>
+                              <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#E63946" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#E63946" stopOpacity={1} />
+                              </linearGradient>
+                              <linearGradient id="colorGreen" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#2A9D8F" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#2A9D8F" stopOpacity={1} />
+                              </linearGradient>
+                            </defs>
                             <Pie
-                              data={userTypePieData}
-                              innerRadius={70}
-                              outerRadius={100}
-                              paddingAngle={8}
+                              data={userTypePieData.map((item, i) => ({
+                                ...item,
+                                color: [`url(#colorBlue)`, `url(#colorYellow)`, `url(#colorRed)`, `url(#colorGreen)`, `url(#colorBlue)`][i % 5]
+                              }))}
+                              innerRadius={85}
+                              outerRadius={115}
+                              paddingAngle={5}
                               dataKey="value"
-                              label={({ name, value }) => `${name}: ${value}`}
+                              stroke="none"
+                              animationBegin={0}
+                              animationDuration={1500}
+                              cornerRadius={10}
                             >
                               {userTypePieData.map((entry: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
+                                <Cell key={`cell-${index}`} fill={[`url(#colorBlue)`, `url(#colorYellow)`, `url(#colorRed)`, `url(#colorGreen)`, `url(#colorBlue)`][index % 5]} />
                               ))}
                             </Pie>
                             <Tooltip
-                              contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                              formatter={(value: any) => [value, ""]}
+                              contentStyle={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                borderRadius: '1.5rem',
+                                border: 'none',
+                                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
+                                padding: '15px'
+                              }}
+                              itemStyle={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '10px' }}
+                              formatter={(value: any) => [`${value} pessoas`, ""]}
                             />
                           </PieChart>
                         </ResponsiveContainer>
                       </div>
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-center">
-                        <div>
-                          <p className="text-[10px] font-black uppercase opacity-40">Total</p>
-                          <p className="text-2xl font-black text-[#0041B6]">{totalInscritos}</p>
-                        </div>
+                      <div className="mt-6 flex flex-wrap justify-center gap-4">
+                        {userTypePieData.map((item, index) => (
+                          <div key={item.name} className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ['#0041B6', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5] }}></div>
+                            <p className="text-[9px] font-black uppercase text-[#0041B6]/60">{item.name}: <span className="text-[#0041B6] text-xs">{((item.value / (totalInscritos || 1)) * 100).toFixed(0)}%</span></p>
+                          </div>
+                        ))}
                       </div>
                     </>
                   ) : (
