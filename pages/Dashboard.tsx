@@ -578,21 +578,14 @@ const Dashboard: React.FC = () => {
   const totalDoadores = Math.max(0, totalEntregues - totalSemDoacao);
 
   const unitCountsRaw = stats?.unit_counts || {};
-  const barData = Object.entries({
-    'Boa Viagem': 0,
-    'Caxangá': 0,
-    'Centro Administrativo': 0,
-    'Graças': 0,
-    'Olinda': 0,
-    'Paulista': 0,
-    ...unitCountsRaw
-  })
-    .map(([name, value]) => ({
+  const barData = Object.entries(unitCountsRaw)
+    .map(([name, data]: [string, any]) => ({
       name,
-      value: Number(value),
+      total: Number(data.total || 0),
+      delivered: Number(data.delivered || 0),
     }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 10) // Limit to top 10 for charts
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 10)
     .map((item, index) => ({
       ...item,
       color: ['#0041B6', '#1D71BC', '#FFD100', '#2A9D8F', '#E63946'][index % 5]
@@ -606,9 +599,11 @@ const Dashboard: React.FC = () => {
   }));
 
   const userTypeCounts = stats?.user_type_counts || {};
-  const userTypePieData = Object.entries(userTypeCounts).map(([name, value], index) => ({
+  const userTypePieData = Object.entries(userTypeCounts).map(([name, data]: [string, any], index) => ({
     name,
-    value: Number(value),
+    total: Number(data.total || 0),
+    delivered: Number(data.delivered || 0),
+    value: Number(data.total || 0), // Use for Pie proportions
     color: ['#0041B6', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5]
   }));
 
@@ -883,35 +878,35 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="glass-card p-8 rounded-[2.5rem] shadow-xl border border-white/50 flex flex-col">
                 <h4 className="text-[#0041B6] text-center font-black uppercase tracking-widest text-xs mb-10">Desempenho por Unidade (Ranking)</h4>
-                <div className="h-[300px] w-full">
+                <div className="flex-1 space-y-6">
                   {barData && barData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={barData} layout="vertical" margin={{ top: 5, right: 40, left: 40, bottom: 5 }}>
-                        <XAxis type="number" hide />
-                        <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#0041B6', fontSize: 10, fontWeight: 800 }} width={100} />
-                        <Tooltip
-                          contentStyle={{ backgroundColor: '#fff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                          cursor={{ fill: '#0041B6', fillOpacity: 0.05 }}
-                          formatter={(value: any) => [value, ""]}
-                        />
-                        <Bar dataKey="value" radius={[0, 10, 10, 0]} barSize={30}>
-                          {barData.map((entry: any, index: number) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                          <LabelList
-                            dataKey="value"
-                            position="right"
-                            formatter={(v: number) => {
-                              const pct = totalInscritos > 0 ? ((v / totalInscritos) * 100).toFixed(0) : 0;
-                              return `${v} (${pct}%)`;
-                            }}
-                            style={{ fill: '#0041B6', fontSize: 10, fontWeight: 900 }}
-                          />
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
+                    barData.map((data, index) => {
+                      const totalPct = totalInscritos > 0 ? ((data.total / totalInscritos) * 100).toFixed(0) : 0;
+                      const deliveryPct = data.total > 0 ? ((data.delivered / data.total) * 100).toFixed(0) : 0;
+
+                      return (
+                        <div key={data.name} className="space-y-2">
+                          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+                            <span className="text-[#0041B6]">{data.name}</span>
+                            <div className="flex items-center gap-4">
+                              <span className="text-[#0041B6]/40">{data.total} Inscritos ({totalPct}%)</span>
+                              <span className="text-[#2A9D8F]">{data.delivered} Pulseiras ({deliveryPct}%)</span>
+                            </div>
+                          </div>
+                          <div className="h-3 w-full bg-white rounded-full overflow-hidden flex shadow-inner border border-[#0041B6]/5">
+                            <div
+                              className="h-full transition-all duration-1000 ease-out"
+                              style={{
+                                width: `${(data.total / (barData[0].total || 1)) * 100}%`,
+                                backgroundColor: data.color
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })
                   ) : (
-                    <div className="h-full flex flex-col items-center justify-center text-gray-300">
+                    <div className="h-full flex flex-col items-center justify-center text-gray-300 py-20">
                       <ClipboardList size={48} className="mb-4 opacity-20" />
                       <p className="text-[10px] font-black uppercase tracking-widest">Sem dados para exibir</p>
                     </div>
@@ -979,19 +974,48 @@ const Dashboard: React.FC = () => {
                                 padding: '15px'
                               }}
                               itemStyle={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '10px' }}
-                              formatter={(value: any) => [`${value} pessoas`, ""]}
+                              content={({ active, payload }) => {
+                                if (active && payload && payload.length) {
+                                  const data = payload[0].payload;
+                                  const totalPct = totalInscritos > 0 ? ((data.total / totalInscritos) * 100).toFixed(1) : 0;
+                                  const deliveryPct = data.total > 0 ? ((data.delivered / data.total) * 100).toFixed(1) : 0;
+                                  return (
+                                    <div className="bg-white p-4 rounded-3xl shadow-2xl border border-gray-100 flex flex-col gap-1">
+                                      <p className="font-black uppercase text-[10px] mb-2 border-b pb-1" style={{ color: data.color }}>{data.name}</p>
+                                      <p className="text-gray-500 text-[9px] font-bold uppercase">Inscritos: <span className="text-[#0041B6] font-black">{data.total} ({totalPct}%)</span></p>
+                                      <p className="text-gray-500 text-[9px] font-bold uppercase">Entregas: <span className="text-[#2A9D8F] font-black">{data.delivered} ({deliveryPct}% do grupo)</span></p>
+                                    </div>
+                                  );
+                                }
+                                return null;
+                              }}
                             />
                           </PieChart>
                         </ResponsiveContainer>
                       </div>
-                      <div className="mt-6 flex flex-wrap justify-center gap-4">
-                        {userTypePieData.map((item, index) => (
-                          <div key={item.name} className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ['#0041B6', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5] }}></div>
-                            <p className="text-[9px] font-black uppercase text-[#0041B6]/60">
-                              {item.name}: <span className="text-[#0041B6] text-xs font-black">{item.value}</span>
-                              <span className="opacity-40 ml-1">({((item.value / (totalInscritos || 1)) * 100).toFixed(0)}%)</span>
-                            </p>
+                      <div className="mt-10 grid grid-cols-2 lg:grid-cols-3 gap-6">
+                        {userTypePieData.map((item) => (
+                          <div key={item.name} className="flex flex-col bg-white/50 p-5 rounded-[2rem] border-2 border-white/60 shadow-sm">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="w-3 h-3 rounded-full shadow-lg" style={{ backgroundColor: item.color }}></div>
+                              <p className="text-[10px] font-black uppercase text-[#0041B6] truncate">{item.name}</p>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[8px] font-bold uppercase text-[#0041B6]/40 tracking-widest">Inscritos</span>
+                                <span className="text-xs font-black text-[#0041B6]">{item.total}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-[8px] font-bold uppercase text-[#2A9D8F] tracking-widest">Entregues</span>
+                                <span className="text-xs font-black text-[#2A9D8F]">{item.delivered}</span>
+                              </div>
+                              <div className="h-1 w-full bg-[#0041B6]/5 rounded-full mt-2 overflow-hidden">
+                                <div
+                                  className="h-full bg-[#2A9D8F]"
+                                  style={{ width: `${item.total > 0 ? (item.delivered / item.total) * 100 : 0}%` }}
+                                />
+                              </div>
+                            </div>
                           </div>
                         ))}
                       </div>
