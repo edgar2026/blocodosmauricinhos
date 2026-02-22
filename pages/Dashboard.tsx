@@ -78,21 +78,55 @@ const Dashboard: React.FC = () => {
   const commonFoods = ['Arroz', 'Feijão', 'Macarrão', 'Açúcar', 'Óleo', 'Farinha', 'Leite em pó', 'Café', 'Outros'];
   const itemsPerPage = 10;
 
+  const [stats, setStats] = useState<any>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [filteredTotalCount, setFilteredTotalCount] = useState(0);
+
+  const fetchStats = async () => {
+    setStatsLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('get_dashboard_stats');
+      if (error) throw error;
+      setStats(data);
+    } catch (err) {
+      console.error('Erro ao buscar estatísticas:', err);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
   const fetchParticipants = async () => {
     setLoading(true);
     try {
-      // Usamos count: 'exact' para pegar o total real mesmo se o PostgREST tiver limite de linhas
-      const { data, error: fetchError, count } = await supabase
+      let query = supabase
         .from('participants')
-        .select('*', { count: 'exact' })
-        .order('created_at', { ascending: false });
+        .select('*', { count: 'exact' });
+
+      if (searchQuery) {
+        // Busca simples por nome, cpf ou email
+        query = query.or(`name.ilike.%${searchQuery}%,cpf.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
+      }
+
+      if (filterUnit !== 'all') {
+        query = query.eq('unit', filterUnit);
+      }
+      if (filterStatus !== 'all') {
+        query = query.eq('bracelet_delivered', filterStatus === 'entregue');
+      }
+      if (filterProfile !== 'all') {
+        query = query.eq('user_type', filterProfile);
+      }
+
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+
+      const { data, error: fetchError, count } = await query
+        .order('created_at', { ascending: false })
+        .range(from, to);
 
       if (fetchError) throw fetchError;
-
-      const safeData = Array.isArray(data) ? data : [];
-      console.log("Fetched Participants:", safeData.length, "Total:", count);
-      setParticipants(safeData);
-      if (count !== null) setTotalCount(count);
+      setParticipants(data || []);
+      if (count !== null) setFilteredTotalCount(count);
     } catch (err) {
       console.error('Erro ao buscar participantes:', err);
       setError('Erro ao carregar dados dos participantes.');
@@ -140,6 +174,7 @@ const Dashboard: React.FC = () => {
   const refreshAllData = async () => {
     setLoading(true);
     await Promise.all([
+      fetchStats(),
       fetchParticipants(),
       fetchAttractions(),
       fetchSettings()
@@ -197,7 +232,10 @@ const Dashboard: React.FC = () => {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'participants' },
-        () => fetchParticipants()
+        () => {
+          fetchStats();
+          fetchParticipants();
+        }
       )
       .subscribe();
 
@@ -218,8 +256,14 @@ const Dashboard: React.FC = () => {
 
   // Reset page when search or filters change
   useEffect(() => {
+    if (isAuthenticated) {
+      fetchParticipants();
+    }
+  }, [searchQuery, filterUnit, filterStatus, filterProfile, currentPage, isAuthenticated]);
+
+  useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, filterUnit, filterStatus, filterProfile, activeTab]);
+  }, [searchQuery, filterUnit, filterStatus, filterProfile]);
 
 
 
@@ -512,7 +556,7 @@ const Dashboard: React.FC = () => {
       setFoodWeight(1);
 
       // Force refresh data
-      await fetchParticipants();
+      await Promise.all([fetchStats(), fetchParticipants()]);
       setShowSuccessModal(true);
 
       // Small vibration effect if supported
@@ -525,87 +569,56 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Calculate statistics safely
-  const totalInscritos = totalCount || (Array.isArray(participants) ? participants.length : 0);
-  const totalEntregues = Array.isArray(participants) ? participants.filter(p => p?.bracelet_delivered).length : 0;
-  const totalDoadores = Array.isArray(participants) ? participants.filter(p => p?.bracelet_delivered && (p?.food_kg || 0) > 0).length : 0;
-  const totalSemDoacao = totalEntregues - totalDoadores;
-  const totalPendentes = totalInscritos - totalEntregues;
-  const totalFoodKg = Array.isArray(participants) ? participants.reduce((acc, p) => acc + (p?.food_kg || 0), 0) : 0;
+  // Calculate statistics from server-side stats object
+  const totalInscritos = stats?.total_inscritos || 0;
+  const totalEntregues = stats?.total_entregues || 0;
+  const totalFoodKg = stats?.total_food_kg || 0;
+  const entreguesHoje = stats?.entregues_hoje || 0;
+  const totalSemDoacao = stats?.sem_doacao || 0;
+  const totalDoadores = Math.max(0, totalEntregues - totalSemDoacao);
 
-  const today = new Date().toISOString().split('T')[0];
-  const entreguesHoje = Array.isArray(participants) ? participants.filter(p =>
-    p?.bracelet_delivered && p?.delivery_at && typeof p.delivery_at === 'string' && p.delivery_at.startsWith(today)
-  ).length : 0;
-
-  const unitCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
-    const unit = p?.unit || 'Não Informada';
-    acc[unit] = (acc[unit] || 0) + 1;
-    return acc;
-  }, {
+  const unitCountsRaw = stats?.unit_counts || {};
+  const barData = Object.entries({
     'Boa Viagem': 0,
     'Caxangá': 0,
     'Centro Administrativo': 0,
     'Graças': 0,
     'Olinda': 0,
-    'Paulista': 0
-  } as Record<string, number>) : {};
-
-  const barData = Object.entries(unitCounts)
+    'Paulista': 0,
+    ...unitCountsRaw
+  })
     .map(([name, value]) => ({
-      name: name as string,
+      name,
       value: Number(value),
     }))
     .sort((a, b) => b.value - a.value)
+    .slice(0, 10) // Limit to top 10 for charts
     .map((item, index) => ({
       ...item,
       color: ['#0041B6', '#1D71BC', '#FFD100', '#2A9D8F', '#E63946'][index % 5]
     }));
 
-  const foodTypeCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
-    if (p?.bracelet_delivered && p?.food_type) {
-      acc[p.food_type] = (acc[p.food_type] || 0) + (p.food_kg || 0);
-    }
-    return acc;
-  }, {} as Record<string, number>) : {};
-
+  const foodTypeCounts = stats?.food_type_counts || {};
   const foodPieData = Object.entries(foodTypeCounts).map(([name, value], index) => ({
     name,
-    value,
+    value: Number(value),
     color: ['#FFD100', '#0041B6', '#E63946', '#2A9D8F', '#1D71BC', '#F97316', '#8E44AD'][index % 7]
   }));
 
-  const userTypeCounts = Array.isArray(participants) ? participants.reduce((acc, p) => {
-    const type = p?.user_type || 'Aluno(a)';
-    acc[type] = (acc[type] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>) : {};
-
+  const userTypeCounts = stats?.user_type_counts || {};
   const userTypePieData = Object.entries(userTypeCounts).map(([name, value], index) => ({
     name,
-    value,
+    value: Number(value),
     color: ['#0041B6', '#FFD100', '#E63946', '#2A9D8F', '#1D71BC'][index % 5]
   }));
 
-  const filteredParticipants = participants.filter(p => {
-    const q = searchQuery.toLowerCase();
-    const name = (p?.name || '').toLowerCase();
-    const cpf = p?.cpf || '';
-    const email = (p?.email || '').toLowerCase();
-
-    const matchesSearch = name.includes(q) || cpf.includes(q) || email.includes(q);
-    const matchesUnit = filterUnit === 'all' || p.unit === filterUnit;
-    const matchesStatus = filterStatus === 'all' ||
-      (filterStatus === 'entregue' ? p.bracelet_delivered : !p.bracelet_delivered);
-    const matchesProfile = filterProfile === 'all' || p.user_type === filterProfile;
-
-    return matchesSearch && matchesUnit && matchesStatus && matchesProfile;
-  });
+  const totalPages = Math.ceil(filteredTotalCount / itemsPerPage);
 
   console.log("Dashboard State:", { isAuthenticated, loading, participantsCount: participants?.length, hasError: !!error });
 
 
-  const { paginatedItems: paginatedParticipants, totalPages } = paginate<Participant>(filteredParticipants, currentPage, itemsPerPage);
+  const paginatedParticipants = participants;
+  const filteredParticipants = participants; // No painel agora, os participantes já vêm filtrados do servidor
   const getPaginationPages = () => getPaginationRange(currentPage, totalPages);
 
   // If we are loading for the first time or have a critical error
@@ -1137,7 +1150,7 @@ const Dashboard: React.FC = () => {
               </div>
 
               {/* Paginação */}
-              {filteredParticipants.length > itemsPerPage && (
+              {filteredTotalCount > itemsPerPage && (
                 <div className="mt-8 flex items-center justify-center gap-3">
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
