@@ -385,9 +385,6 @@ const Dashboard: React.FC = () => {
             <p className="text-white text-[7px] font-bold uppercase tracking-[0.5em]">
               Segurança Criptografada via Supabase SSL
             </p>
-            <p className="text-[#FFD100] text-[8px] font-black uppercase tracking-[0.6em]">
-              Desenvolvido por Edgar Tavares.
-            </p>
           </div>
         </div>
       </div>
@@ -1497,9 +1494,6 @@ const Dashboard: React.FC = () => {
 
       <footer className="w-full py-12 px-8 flex flex-col items-center gap-4 mt-auto">
         <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#0041B6]/20 to-transparent"></div>
-        <p className="text-[10px] text-[#0041B6]/40 uppercase tracking-[0.6em] font-black hover:text-[#0041B6] transition-all cursor-default">
-          Desenvolvido por Edgar Tavares.
-        </p>
       </footer>
 
       {/* Modal Detalhes do Participante */}

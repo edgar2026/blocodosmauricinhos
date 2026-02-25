@@ -99,7 +99,7 @@ const LandingPage: React.FC = () => {
             <img
               src="/hero-carnaval.png"
               alt="Carnaval Bloco dos Mauricinhos"
-              className="w-full h-auto object-contain block"
+              className="w-full h-auto min-h-[320px] md:min-h-0 object-cover md:object-contain block transition-all duration-700"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = '/hero-carnaval.jpg';
               }}
@@ -121,7 +121,7 @@ const LandingPage: React.FC = () => {
 
       {/* Details & Solidarity */}
       {settings?.show_solidarity !== false && (
-        <section id="evento" className="py-20 px-4 md:px-12 bg-white relative z-30 -mt-10 rounded-t-[4rem] border-t border-gray-100 shadow-2xl">
+        <section id="evento" className="py-12 md:py-20 px-4 md:px-12 bg-white relative z-30 -mt-8 md:-mt-12 rounded-t-[3rem] md:rounded-t-[6rem] border-t border-gray-100 shadow-2xl">
           <div className="max-w-6xl mx-auto">
             {/* Action Section - Moved from Hero to here for a cleaner look */}
             <div className="flex flex-col items-center gap-6 mb-16 animate-modal-enter">
@@ -360,10 +360,6 @@ const LandingPage: React.FC = () => {
               <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
                 <p className="text-[10px] text-blue-200/30 uppercase tracking-[0.4em] font-bold text-center md:text-left">
                   {settings?.footer_copyright || '© 2026 UNINASSAU | Compromisso com a Educação e Cultura'}
-                </p>
-                <div className="hidden md:block w-px h-3 bg-white/10"></div>
-                <p className="text-[9px] text-[#FFD100]/40 uppercase tracking-[0.5em] font-black hover:text-[#FFD100]/80 transition-colors cursor-default">
-                  Desenvolvido por Edgar Tavares.
                 </p>
               </div>
 
