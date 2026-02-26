@@ -81,6 +81,68 @@ const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const [filteredTotalCount, setFilteredTotalCount] = useState(0);
+  const [exportLoading, setExportLoading] = useState<string | null>(null);
+
+  const handleExport = async (format: 'pdf' | 'excel') => {
+    setExportLoading(format);
+    try {
+      let allData: Participant[] = [];
+      let page = 0;
+      const pageSize = 1000;
+      let hasMore = true;
+
+      while (hasMore) {
+        let query = supabase
+          .from('participants')
+          .select('*');
+
+        if (searchQuery) {
+          query = query.or(`name.ilike.%${searchQuery}%,cpf.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
+        }
+
+        if (filterUnit !== 'all') {
+          query = query.eq('unit', filterUnit);
+        }
+        if (filterStatus !== 'all') {
+          query = query.eq('bracelet_delivered', filterStatus === 'entregue');
+        }
+        if (filterProfile !== 'all') {
+          query = query.eq('user_type', filterProfile);
+        }
+
+        const from = page * pageSize;
+        const to = from + pageSize - 1;
+
+        const { data, error: fetchError } = await query
+          .order('name', { ascending: true })
+          .range(from, to);
+
+        if (fetchError) throw fetchError;
+
+        if (data && data.length > 0) {
+          allData = [...allData, ...data];
+          if (data.length < pageSize) {
+            hasMore = false;
+          } else {
+            page++;
+          }
+        } else {
+          hasMore = false;
+        }
+      }
+
+      if (format === 'pdf') {
+        exportToPDF(allData);
+      } else {
+        exportToExcel(allData);
+      }
+    } catch (err) {
+      console.error(`Erro ao exportar ${format}:`, err);
+      alert(`Erro ao gerar ${format.toUpperCase()}. Tente novamente.`);
+    } finally {
+      setExportLoading(null);
+    }
+  };
 
   const fetchStats = async () => {
     setStatsLoading(true);
@@ -1047,21 +1109,23 @@ const Dashboard: React.FC = () => {
 
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => exportToPDF(filteredParticipants)}
-                      className="bg-white text-[#E63946] border-2 border-[#E63946]/10 px-8 py-5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-[#E63946] hover:text-white transition-all flex items-center gap-3 group active:scale-95"
+                      onClick={() => handleExport('pdf')}
+                      disabled={!!exportLoading}
+                      className="bg-white text-[#E63946] border-2 border-[#E63946]/10 px-8 py-5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-[#E63946] hover:text-white transition-all flex items-center gap-3 group active:scale-95 disabled:opacity-50"
                       title="Baixar Relatório em PDF"
                     >
-                      <FileText size={18} className="group-hover:scale-110 transition-transform" />
-                      <span>Exportar PDF</span>
+                      {exportLoading === 'pdf' ? <Loader2 size={18} className="animate-spin" /> : <FileText size={18} className="group-hover:scale-110 transition-transform" />}
+                      <span>{exportLoading === 'pdf' ? 'Gerando...' : 'Exportar PDF'}</span>
                     </button>
 
                     <button
-                      onClick={() => exportToExcel(filteredParticipants)}
-                      className="bg-white text-[#2A9D8F] border-2 border-[#2A9D8F]/10 px-8 py-5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-[#2A9D8F] hover:text-white transition-all flex items-center gap-3 group active:scale-95"
+                      onClick={() => handleExport('excel')}
+                      disabled={!!exportLoading}
+                      className="bg-white text-[#2A9D8F] border-2 border-[#2A9D8F]/10 px-8 py-5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-[#2A9D8F] hover:text-white transition-all flex items-center gap-3 group active:scale-95 disabled:opacity-50"
                       title="Baixar Planilha Excel"
                     >
-                      <FileSpreadsheet size={18} className="group-hover:scale-110 transition-transform" />
-                      <span>Exportar Excel</span>
+                      {exportLoading === 'excel' ? <Loader2 size={18} className="animate-spin" /> : <FileSpreadsheet size={18} className="group-hover:scale-110 transition-transform" />}
+                      <span>{exportLoading === 'excel' ? 'Gerando...' : 'Exportar Excel'}</span>
                     </button>
                   </div>
                 </div>

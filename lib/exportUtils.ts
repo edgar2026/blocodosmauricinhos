@@ -1,12 +1,7 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Participant } from './supabase';
-
-// Amplia o tipo jsPDF para incluir autoTable
-interface jsPDFWithAutoTable extends jsPDF {
-    autoTable: (options: any) => jsPDF;
-}
 
 /**
  * Gera um nome de arquivo padronizado com a data atual
@@ -21,7 +16,7 @@ const getFileName = (format: string) => {
  */
 export const exportToPDF = (data: Participant[]) => {
     // Usar orientação paisagem (landscape) para caber mais colunas
-    const doc = new jsPDF({ orientation: 'landscape' }) as jsPDFWithAutoTable;
+    const doc = new jsPDF({ orientation: 'landscape' });
     const now = new Date();
     const dateStr = now.toLocaleDateString('pt-BR');
     const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -46,7 +41,7 @@ export const exportToPDF = (data: Participant[]) => {
         p.bracelet_delivered ? `${p.food_kg}kg` : '-'
     ]);
 
-    doc.autoTable({
+    autoTable(doc, {
         startY: 35,
         head: [['Folião', 'CPF', 'Perfil', 'Unidade', 'E-mail', 'WhatsApp', 'Status', 'Alimento', 'Peso']],
         body: tableData,
